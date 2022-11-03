@@ -1,0 +1,49 @@
+stiv {
+    user-select: none;
+}
+
+biiv {
+    border-style: solid;
+    border-color: dimgray;
+    padding-left: 4px;
+}
+
+driv {
+    border-style: solid;
+    border-color: dimgray;
+    display: block;
+
+    padding: 3px;
+    width: fit-content;
+}
+
+drutton {
+    border-left-style: solid;
+    border-color: dimgray;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: lightgrey;
+}
+
+uutton {
+    border-left-style: solid;
+    border-color: dimgray;
+    margin-left: 5px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: lightgrey;
+}
+
+
+.hover:hover .hover-info {
+    display: block;
+  }
+  
+  .hover-info {
+    display: none;
+    /* NEW */
+    background: #C8C8C8;
+    padding: 5px;
+    position: absolute;
+    z-index: 1000;
+  }
