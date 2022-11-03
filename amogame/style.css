@@ -1,0 +1,40 @@
+#hotbar {
+    border-style: solid;
+    padding: 5px;
+    margin-bottom: 5px;
+    width: fit-content;
+}
+
+.hotbar-e {
+    display: inline-block;
+    border-style: solid;
+    margin: 0px 2px;
+    padding: 2px;
+}
+
+.hotbar-e-selected {
+    border-color: brown;
+}
+
+.card {
+    display: inline-block;
+    margin: 5px;
+    width: 160px;
+    padding: 5px;
+    border-style: solid;
+}
+
+#Tileinfo {
+    border-style: solid;
+    border-width: 5px;
+    padding: 5;
+    width: 182px;
+    padding: 5px;
+    outline: 2px solid black;
+}
+
+#Structinfo {
+    border-style: solid;
+    width: 190px;
+    padding: 5px;
+}
