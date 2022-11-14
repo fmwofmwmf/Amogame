@@ -195,8 +195,8 @@ class Land extends Map {
  * 
  * @param {Tile} shape Tile to display info of
  */
-function displayTileInfo(shape) {
-    TileInfo.innerHTML = ''
+function displayTileInfo(shape, node, rem=false) {
+    node.innerHTML = ''
     const info = shape.getName()
 
     const tier = document.createElement('div')
@@ -212,9 +212,35 @@ function displayTileInfo(shape) {
     stars.className = 'tile-info-stars'
     stars.innerHTML = info.stars
 
-    const body = tile_to_canvas(100, 100, shape)
+
+    const body = document.createElement('div')
     body.className = 'tile-info-body'
+    const body1 = tile_to_canvas(100, 100, shape)
+    body1.className = 'tile-info-body-prev'
+    const body2 = document.createElement('div')
+    body2.className = 'tile-info-body-img'
+
+    body2.innerHTML = `<br>anime girl picture<br>anime girl picture`
+    body2.style.display = 'none';
     
+    const change = document.createElement('span')
+    change.innerHTML = 'S'
+    let y = 0
+    change.addEventListener('click', e=>{
+        if (y==0) {
+            y=1;
+            body1.style.display = 'none';
+            body2.style.display = 'block';
+        } else if (y==1) {
+            y=0;
+            body1.style.display = 'block';
+            body2.style.display = 'none';
+        }
+    })
+    change.className = 'tile-info-switch'
+    
+    body.appendChild(body1)
+    body.appendChild(body2)
 
     const other = document.createElement('div')
     other.className = 'tile-info-other'
@@ -227,30 +253,32 @@ function displayTileInfo(shape) {
         cards.appendChild(c.display())
     });
 
-    TileInfo.appendChild(body)
-    TileInfo.appendChild(name)
-    TileInfo.appendChild(stars)
-    TileInfo.appendChild(tier)
-    TileInfo.appendChild(other)
-    TileInfo.appendChild(cards)
+    node.appendChild(body)
+    node.appendChild(change)
+    node.appendChild(name)
+    node.appendChild(stars)
+    node.appendChild(tier)
+    node.appendChild(other)
+    node.appendChild(cards)
 
-    TileInfo.style.borderColor = colors[shape.biome];
+    node.style.borderColor = colors[shape.biome];
     //if center add remove button
-    if (land_grid.tile_list.find(e=>{return e.tile==shape})) {
-        let r = document.createElement('button')
-        r.innerHTML = '<center>✕</center>'
-        r.classList = 'tile-info-remove'
-        r.addEventListener('click', e=>{
-            land_grid.remove(shape)
-            inv.push(shape)
-            display_inv()
-            land_grid.refresh()
-            TileInfo.innerHTML = 'Nothing'
-            TileInfo.style.borderColor = 'red'
-        })
-        TileInfo.appendChild(r)
+    if(rem) {
+        if (land_grid.tile_list.find(e=>{return e.tile==shape})) {
+            let r = document.createElement('button')
+            r.innerHTML = '<center>✕</center>'
+            r.classList = 'tile-info-remove'
+            r.addEventListener('click', e=>{
+                land_grid.remove(shape)
+                inv.push(shape)
+                display_inv()
+                land_grid.refresh()
+                node.innerHTML = 'Nothing'
+                node.style.borderColor = 'red'
+            })
+            node.appendChild(r)
+        }
     }
-    
 }
 
 function tile_to_canvas(x, y, shape) {
@@ -259,7 +287,7 @@ function tile_to_canvas(x, y, shape) {
     const cx = can.getContext('2d')
     can.width = s*shape.w
     can.height = s*shape.h
-    const newcol = ['white', 'purple', 'purple', 'purple', 'purple']
+    const newcol = ['rgba(0,0,0,0)', 'purple', 'purple', 'purple', 'purple']
     render_grid(s, shape.data, cx, newcol)
 
     return can
@@ -284,7 +312,7 @@ function add_struct_info(element, pos, draw=false) {
             if (draw) {
                 element.main.draw_border(pos[0], pos[1], land_grid.size, land_grid.ctx)
             }
-            displayTileInfo(element.main);
+            displayTileInfo(element.main, TileInfo, true);
             StructInfo.innerHTML += `Center
             <br>${biomenames[element.b]}`
             break;

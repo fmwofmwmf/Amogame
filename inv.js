@@ -1,6 +1,7 @@
 const hbar = document.getElementById('hotbar')
 const card_col = document.getElementById('card-inv')
 const tile_col = document.getElementById('tile-inv')
+const tile_slot = document.getElementById('tile-view-m')
 const card_tree_m = document.getElementById('card-tree-main')
 
 var collHTML = []
@@ -8,6 +9,7 @@ var collHTML = []
 var selected_card = null
 var cinv = [new Card('structure', 'power', 0), new Card('structure', 'power', 1)]
 var cinvHTML = []
+var selected_tile = null
 var c_tree_selected = -1
 
 /**
@@ -26,7 +28,7 @@ function move(from, to, match, package) {
 }
 
 /**
- * Selects/deselectes an element in inv
+ * Selects/deselects an element in inv
  * @param {number} j index of element to select
  */
 function select(j) {
@@ -38,7 +40,7 @@ function select(j) {
             invHTML[selected].className = "hotbar-e"
         invHTML[j].className = "hotbar-e hotbar-e-selected"
         selected = j
-        displayTileInfo(inv[j])
+        displayTileInfo(inv[j], TileInfo, true)
     }
 }
 
@@ -72,11 +74,37 @@ function display_collection() {
         const s = document.createElement('div');
         s.className = 'tile-inv-e'
         s.innerHTML=`${tiers[e.tier]}`
-
+        s.draggable = true;
+        s.addEventListener('dragstart', ev => {
+            ev.dataTransfer.setData("index", i);
+        })
         collHTML[i] = s;
         tile_col.appendChild(s)
     }
 }
+
+tile_slot.addEventListener('dragover', e=>{
+    e.preventDefault()
+})
+tile_slot.addEventListener('drop', e=>{
+    const i = e.dataTransfer.getData("index")
+    if (selected_tile!=null) {
+        inv.push(selected_tile)
+    }
+    selected_tile = inv[i]
+    inv.splice(i, 1)
+    display_inv()
+    displayTileInfo(selected_tile, tile_slot)
+    const d = document.createElement('span')
+    d.innerHTML = '-'
+    d.addEventListener('click', e=>{
+        inv.push(selected_tile);
+        selected_tile = null;
+        display_inv()
+        tile_slot.innerHTML = '';
+    })
+    tile_slot.appendChild(d);
+})
 
 function display_cinv() {
     card_col.innerHTML = ''
