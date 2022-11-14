@@ -1,11 +1,3 @@
-const c = document.getElementById('map')
-const ctx = c.getContext("2d", {willReadFrequently: true})
-
-const c_to_t = [5, 10, 15, 20, 30, 40, 50, 65, 80, 90, 100]
-const tiers = ['C', 'UC', 'R', 'SR', 'SSR', 'SSSR', 'UR', 'UUR', 'Exo', 'Myth']
-const names = ['luffy', 'boruto', 'sanji', 'naruto', 'toruto', 'boruto', 'luffy from one piece']
-const borders = ['black', 'grey', 'yellow', 'gold', 'red'];
-const grades = ['F', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS'];
 
 class Tile {
     constructor(w, h, c, b, data) {
@@ -17,10 +9,9 @@ class Tile {
         this.data[c[0]][c[1]].c = 2
         this.data[c[0]][c[1]].main = this
         this.contents = {count:[], struct:[]}
+        this.cards = [new CardHolder(), new CardHolder(), new CardHolder()]
 
         this.name = names[randint(0, names.length)]
-
-        console.log(this, 'Tiledata')
 
         this.fixH()
         this.fixW()
@@ -29,18 +20,21 @@ class Tile {
         this.updateContents()
 
         this.calcGrade();
+        this.global = null;
     }
 
-    plot(x, y, gridd) {
+    plot(x, y, w, h, inp_map) {
         let coord = [x-this.center[0], y-this.center[1]];
+        this.global = coord;
 
         if (coord[0]<0 || coord[1]<0) return false;
+        if (!b_sub_b([coord[0], coord[1], coord[0]+this.w, coord[1]+this.h],
+            [0, 0, w, h])) return false;
         let newmap = [];
         for (let i = 0; i < this.w; i++) {
             newmap[i]=[].fill([],0,this.h)
-
             for (let j = 0; j < this.h; j++) {
-                let mape = gridd.map[i+coord[0]][j+coord[1]];
+                let mape = inp_map[i+coord[0]][j+coord[1]];
                 
                 let tie = this.data[i][j];
                 if (mape.c!=0 && tie.c!=0) return false;
@@ -52,14 +46,12 @@ class Tile {
         for (let i = 0; i < this.w; i++) {
             for (let j = 0; j < this.h; j++) {
                 if (newmap[i][j].c!=0)
-                gridd.map[i+coord[0]][j+coord[1]] = newmap[i][j];
+                inp_map[i+coord[0]][j+coord[1]] = newmap[i][j];
             }
         }
         //grid.elements.push(this);
         return true;
     }
-
-
 
     bindStruct() {
         for (let i = 0; i < this.w; i++) {
@@ -98,7 +90,6 @@ class Tile {
         }
         this.tier = g
         this.stars = (this.contents.count[0]-c_to_t[g])
-        console.log(this.stars,'stars')
         this.rank = randint(0,125);
     }
 
@@ -109,6 +100,9 @@ class Tile {
             'energy':0,
             'food':this.contents.count[1]
         }
+        this.contents.struct.forEach(e => {
+            eco.energy += e.getIncome()
+        });
         return eco
     }
 
@@ -161,17 +155,87 @@ class Tile {
         }
     }
 
-    getNameCard() {
-        return `${tiers[this.tier]} ${'✦'.repeat(Math.floor(this.rank/25))} ${this.name}${this.rank%25>4? '+'+this.rank%25 : '+'.repeat(this.rank%25)}
-        </br>${'✶'.repeat(Math.floor(this.stars/5))}${'★'.repeat(this.stars%5)}
-        </br>${this.contents.count[0]}/${this.w*this.h}`
+    getName() {
+        return {
+            tier: tiers[this.tier],
+            name: this.name,
+            stars: `${'✶'.repeat(Math.floor(this.stars/5))}${'★'.repeat(this.stars%5)}`,
+            rank: `${Math.floor(this.rank/25)}✦  ${this.rank%25>4? '+'+this.rank%25 : '+'.repeat(this.rank%25)}`,
+            ratio: `${this.contents.count[0]}/${this.w*this.h}`,
+        }
+        
+    }
+
+    getCards() {
+
+    }
+
+    draw_border(x, y, s, ctx) {
+        const borders = getborders(this.data, e=>{return e.c!=0})
+        
+        ctx.strokeStyle = 'red';
+        borders.forEach(e => {
+            ctx.beginPath();
+            ctx.moveTo((e[0][0]+x-this.center[0])*s, (e[0][1]+y-this.center[1])*s);
+            ctx.lineTo((e[1][0]+x-this.center[0])*s, (e[1][1]+y-this.center[1])*s);
+            ctx.stroke();
+        });
+    }
+
+    draw_preview(x, y, s, ctx) {
+        for (let i = 0; i < this.data.length; i++) {
+            for (let j = 0; j < this.data[i].length; j++) {
+                let e = this.data[i][j]
+                ctx.globalAlpha = 0.7;
+                ctx.beginPath();
+                switch (e.c) {
+                    case 1:
+                        ctx.fillStyle = 'pink'
+                        ctx.fillRect(s*(i+x-this.center[0]),s*(j+y-this.center[1]), s, s);
+                        break;
+                    case 2:
+                        ctx.fillStyle = 'black'
+                        ctx.fillRect(s*(i+x-this.center[0]),s*(j+y-this.center[1]), s, s);
+                        break;
+                    case 3:
+                        ctx.fillStyle = 'blue'
+                        ctx.fillRect(s*(i+x-this.center[0]),s*(j+y-this.center[1]),s, s);
+                        break;
+                    default:
+                        break;
+                }
+    
+                if (e.c!=0) {
+                    
+                }
+                ctx.globalAlpha = 1.0;
+            }
+        }
+        ctx.strokeStyle = 'white';
+        let bb = [[[0,0],[1,0]],[[1,0],[1,1]],[[1,1],[0,1]],[[0,1],[0,0]]]
+        bb.forEach(e => {
+            ctx.beginPath();
+            ctx.moveTo((e[0][0]*this.w+x-this.center[0])*s, (e[0][1]*this.h+y-this.center[1])*s);
+            ctx.lineTo((e[1][0]*this.w+x-this.center[0])*s, (e[1][1]*this.h+y-this.center[1])*s);
+            ctx.stroke();
+        })
+    }
+
+    remove() {
+        this.plot = null
     }
 }
 
 class Struc {
-    constructor(e, b) {
+    /**
+     * 
+     * @param {string} e type
+     * @param {number} b biome
+     */
+    constructor(e, pos) {
         this.c = 3;
         this.b = b;
+        this.cpos = pos
         this.income = 0;
         this.cards = []
         this.level = 1
@@ -201,198 +265,141 @@ class Struc {
     }
 
     getIncome() {
+        const c = [this.cpos[0]+this.main.global[0]+this.main.center[0],
+        this.cpos[1]+this.main.global[1]+this.main.center[1]]
 
+        const out = gen_connect([0, 0, land_grid.w, land_grid.h],
+            c, e=>{return biome_grid.map[e[0]][e[1]]==biome_grid.map[c[0]][c[1]] &&
+                 land_grid.map[e[0]][e[1]].c!=0})
+
+        return out.length
     }
 
     getInfoCard() {
+        const coord = [this.cpos[0]+
+        this.main.global[0]+
+        this.main.center[0],
+        this.cpos[1]+this.main.global[1]+this.main.center[1]]
+
         return `[${grades[this.grade]}] Lv.${this.level} ${this.type}
-        <br> ${biomenames[this.b]}`
+        <br> ${biomenames[biome_grid.map[coord[0]][coord[1]]]}`
     }
 }
 
-const colors = ['red', 'lightGreen', 'cornsilk', 'darkSeaGreen', 'LawnGreen']
+class Map {
+    constructor(w, h, s, e) {
+        this.w = w
+        this.h = h;
+        this.size = s;
+        this.empty = e
+        this.map = this.gen_empty();
+        this.tile_list = []
+        this.image = undefined
+    }
+
+    gen_empty() {
+        const arr = [];
+        for (let j = 0; j < this.w; j++) {
+            arr[j] = new Array(this.h)
+            for (let i = 0; i < this.h; i++) {
+                arr[j][i] = JSON.parse(JSON.stringify(this.empty))
+            }
+        }
+        return arr
+    }
+}
+
+function b_sub_b(a, b) {
+    return a[0]>=b[0] && a[1]>=b[1] && a[2]<=b[2] && a[3]<=b[3]
+}
+
+function getborders(arr, match) {
+    let borders = []
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr[i].length; j++) {
+            if (match(arr[i][j])){
+            const Eborders = [[[i,j],[i+1,j]], [[i+1,j],[i+1,j+1]],[[i,j],[i,j+1]],[[i,j+1],[i+1,j+1]]]
+                if (j-1>=0){
+                if (arr[i][j-1].c != 0) {
+                    Eborders[0] = null
+                }
+                }
+                if (i+1<arr.length) {
+                if (arr[i+1][j].c != 0) {
+                    Eborders[1] = null
+                }
+                }
+                if (i-1>=0) {
+                if (arr[i-1][j].c != 0){
+                    Eborders[2] = null
+                }
+                }
+                if (j+1<arr[i].length) {
+                if (arr[i][j+1].c != 0) {
+                    Eborders[3] = null
+                }
+                }
+    
+                Eborders.forEach(e => {
+                if (e!=null) {
+                    borders.push(e)
+                }
+                });
+            }
+        }
+    }
+    return borders
+}
+
+const colors = ['lightGrey', 'lightGreen', 'cornsilk', 'darkSeaGreen', 'LawnGreen']
 const biomenames = ['nope', 'plains', 'desert', 'forest', 'green place']
 
 /**
- * Turns a map into a grid
- * @param {any[][]} map 2D array
- * @param {number} size size of square
- * @returns {grid}
- */
-function map_to_grid(map, size) {
-    c.height = map.length*size;
-    c.width = map[0].length*size;
-
-    let grid = {
-        'w':map.length,
-        'h':map[0].length,
-        'size':size,
-        'map':map,
-        'elements':[],
-        'image':ctx.getImageData(0, 0, c.width, c.height)
-    }
-
-    render_grid(grid)
-    return grid
-}
-
-
-/**
- * Tries to replot Tiles on the grid, removes ones that don't fit
- * @returns {Tile[]}
- */
-function re_map() {
-    let bad = []
-    grid.map = generate_empty_map(grid.w, grid.h)
-    for (let i = 0; i < grid.elements.length; i++) {
-        const e = grid.elements[i];
-        if (!e['tile'].plot(e.x, e.y, grid)) {
-            bad.push(e)
-        }
-    }
-    bad.forEach(e => {
-        grid.elements.splice(grid.elements.findIndex(el => {
-            return el==e
-        }))
-    });
-    return bad
-}
-
-/**
- * Renders canvas, saves imagedata
+ * Renders canvas, returns imagedata
  * @param {grid} grid
  *  
- * @returns {void}
+ * @returns {ImageData}
  */
-function render_grid(grid) {
-    for (let i = 0; i < grid.w; i++) {
-        for (let j = 0; j < grid.h; j++) {
-            ctx.beginPath();
-            switch (grid.map[i][j].c) {
+function render_grid(size, arr, cnx, col=colors) {
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr[i].length; j++) {
+            cnx.beginPath();
+            const s = size, x = s*i, y = s*j
+            switch (arr[i][j].c) {
                 case 0:
-                    ctx.fillStyle = 'lightGrey'
+                    cnx.fillStyle = col[0]
+                    cnx.fillRect(x, y, s, s);
                     break;
                 case 1:
-                    ctx.fillStyle = colors[grid.map[i][j].b]
+                    cnx.fillStyle = col[1]
+                    cnx.fillRect(x, y, s, s);
                     break;
                 case 2:
-                    ctx.fillStyle = 'black'
+                    cnx.fillStyle = 'black'
+                    cnx.fillRect(x, y, s, s);
                     break;
                 case 3:
-                    ctx.fillStyle = 'grey'
+                    cnx.fillStyle = col[1]
+                    cnx.fillRect(x, y, s, s);
+                    cnx.fillStyle = 'grey'
+                    cnx.arc(x+s/2, y+s/2, s/3, 0, 2 * Math.PI, false);
+                    cnx.fill()
                     break;
+                default:
+                    break;
+            }
             
-                default:
-                    break;
-            }
-            ctx.fillRect(grid.size*i, grid.size*j, grid.size, grid.size);
         }
     }
-    grid['image']=ctx.getImageData(0, 0, c.width, c.height)
 }
 
-/**
- * Draws border of a tile in red
- * @param {Tile} shape  Tile to outline
- * @param {number} x    grid coord x
- * @param {number} y    grid coord y
- */
-function draw_border(shape, x, y) {
-    let borders = []
-    for (let i = 0; i < shape.data.length; i++) {
-       for (let j = 0; j < shape.data[i].length; j++) {
-          if (shape.data[i][j].c != 0){
-             Eborders = [[[i,j],[i+1,j]], [[i+1,j],[i+1,j+1]],[[i,j],[i,j+1]],[[i,j+1],[i+1,j+1]]]
- 
-             if (j-1>=0){
-                if (shape.data[i][j-1].c != 0) {
-                   Eborders[0] = null
-                }
-             }
-             if (i+1<shape.data.length) {
-                if (shape.data[i+1][j].c != 0) {
-                   Eborders[1] = null
-                }
-             }
-             if (i-1>=0) {
-                if (shape.data[i-1][j].c != 0){
-                   Eborders[2] = null
-                }
-             }
-             if (j+1<shape.data[i].length) {
-                if (shape.data[i][j+1].c != 0) {
-                   Eborders[3] = null
-                }
-             }
- 
-             Eborders.forEach(e => {
-                if (e!=null) {
-                   borders.push(e)
-                }
-             });
-          }
- 
-       }
-    }
-    
-    ctx.strokeStyle = 'red';
-    borders.forEach(e => {
-        ctx.beginPath();
-        ctx.moveTo((e[0][0]+x)*grid.size, (e[0][1]+y)*grid.size);
-        ctx.lineTo((e[1][0]+x)*grid.size, (e[1][1]+y)*grid.size);
-        ctx.stroke();
-    });
-}
-
-/**
- * renders a transparent Tile
- * @param {Tile} shape  Tile to render
- * @param {number} x    grid coord x
- * @param {number} y    grid coord y
- */
-function draw_preview(shape, x, y) {
-    for (let i = 0; i < shape.data.length; i++) {
-        for (let j = 0; j < shape.data[i].length; j++) {
-            let e = shape.data[i][j]
-            ctx.globalAlpha = 0.5;
-            switch (e.c) {
-                case 1:
-                    ctx.fillStyle = colors[e.b]
-                    break;
-                case 2:
-                    ctx.fillStyle = 'black'
-                    break;
-                case 3:
-                    ctx.fillStyle = 'grey'
-                    break;
-                default:
-                    break;
-            }
-
-            if (e.c!=0) {
-                ctx.fillRect(grid.size*(i+x-shape.center[0]),grid.size*(j+y-shape.center[1]),grid.size, grid.size);
-            }
-            ctx.globalAlpha = 1.0;
-        }
-    }
-    ctx.strokeStyle = 'white';
-    let bb = [[[0,0],[1,0]],[[1,0],[1,1]],[[1,1],[0,1]],[[0,1],[0,0]]]
-    bb.forEach(e => {
-        ctx.beginPath();
-        ctx.moveTo((e[0][0]*shape.w+x-shape.center[0])*grid.size, (e[0][1]*shape.h+y-shape.center[1])*grid.size);
-        ctx.lineTo((e[1][0]*shape.w+x-shape.center[0])*grid.size, (e[1][1]*shape.h+y-shape.center[1])*grid.size);
-        ctx.stroke();
-    })
-
-    draw_border(shape, x-shape.center[0], y-shape.center[1])
-    
-}
+const resources = document.getElementById('money')
 
 let eco = {
     'wood':0,
     'stone':0,
     'energy':0,
-    'food':0
+    'food':0,
 }
 
 function updateRes() {
@@ -402,6 +409,8 @@ function updateRes() {
     }
     resources.innerHTML = s
 }
+updateRes()
 
-m = generate_empty_map(20,20);
-var grid = map_to_grid(m, 10)
+m = generate_empty_map(30, 20);
+
+//var grid = map_to_grid(m, 10)

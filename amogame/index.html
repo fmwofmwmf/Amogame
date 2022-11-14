@@ -9,28 +9,56 @@
 </head>
 
 <body>
-    <p id="money"></p>
-    <div id="div1">
-        <div id="hotbar">
-            
-        </div>
-        <canvas id="map"></canvas>
-        <br>
-        <button id="day">D</button>
-        <br>
-        <p>Info:</p>
-        <p id="Tileinfo" style="border-color:black;">nuffin</p>
-        <p id="Structinfo" style="border-color:black;">nothing</p>
-    </div>
-    <div id="div2">
-
-    </div>
-    <div id="div3">
-
-    </div>
     
+    <div id="navbar">
+        <button id="page1">World</button>
+        <button id="page2">Loot</button>
+        <button id="page3">Collection</button>
+        <button id="page4">Card tree</button>
+    </div>
+    <button id="day">D</button>
+    <div id="money"></div>
+    <div id="main">
+        <div id="div1">
+            <div id="hotbar"></div>
+            <div id="canvas-cont">
+                <canvas id="biome"></canvas>
+                <canvas id="land"></canvas>
+            </div>
+            
+            <div id="Tileinfo" style="border-color:black;">nuffin</div>
+            <div id="Structinfo" style="border-color:black;">nothing</div>
+        </div>
+        <div id="div2">
+            <button id="shop-button">shop</button>
+            <button id="box-button">boxes</button>
+            <div id="lootboxes" style="display:none;">
+                <div id="lootopen"></div>
+                <div id="lootcrates"></div>
+            </div>
+            <div id="shop"></div>
+        </div>
+        <div id="div3">
+            <div id="tile-view"></div>
+            <div id="tile-mods"></div>
+            <div id="tile-inv"></div>
+        </div>
+        <div id="div4">
+            <div id="card-tree">
+                <div id="card-tree-main"></div>
+            </div>
+            <div id="card-inv"></div>
+        </div>
+    </div>
+    <script src="load.js"></script>
+    <script src="algorithms.js"></script>
     <script src="generation.js"></script>
+    <script src="cards.js"></script>
     <script src="script.js"></script>
+    <script src="land_tab.js"></script>
+    <script src="biome_tab.js"></script>
+    <script src="loot.js"></script>
+    <script src="lootbox.js"></script>
     <script src="interaction.js"></script>
     <script src="inv.js"></script>
     

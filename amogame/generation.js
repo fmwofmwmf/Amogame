@@ -1,10 +1,3 @@
-/**
- * Creates a 2D array with empty Obj
- * @param {number} w width
- * @param {number} h height
- * 
- * @returns {any[][]} 2D array filled with {c:0}
- */
 function generate_empty_map(w, h) {
     const arr = [];
     for (let j = 0; j < w; j++) {
@@ -15,6 +8,7 @@ function generate_empty_map(w, h) {
     }
     return arr
 }
+
 
 /**
  * Generates a Tile
@@ -28,24 +22,18 @@ function generate_tile(count, struct, bime=-1) {
     const s = Math.ceil(Math.sqrt(count)*2)
     const arr = generate_empty_map(s,s);
 
-    if (bime==-1) {
-        bime=randint(0,4)
-    }
-    const b_w = [1,1,1,1]
-    b_w[bime] *= 5;
-    const biom = biome(s, s, [1, 2, 3, 4], b_w)
     const w = weightmap(s, s, 2)
     const hf = Math.floor(s / 2)
     let land = []
 
     let i = 1
     let iter = 0
-    arr[hf][hf] = {c:1, b:biom[hf][hf]}
+    arr[hf][hf] = {c:1}
     while (i!=count || iter>10000) {
         iter++;
         let x = randint(0,s), y=randint(0,s)
         if (Math.random() < w[x][y] && arr[x][y].c==0) {
-            arr[x][y]={c:1, b:biom[x][y]}
+            arr[x][y]={c:1}
             land.push([x,y])
             i++;
         }
@@ -53,7 +41,8 @@ function generate_tile(count, struct, bime=-1) {
 
     land.sort(() => Math.random() - Math.random())
     for (let i = 0; i < struct; i++) {
-        arr[land[i][0]][land[i][1]] = new Struc('Windmill', biom[land[i][0]][land[i][1]]);
+        arr[land[i][0]][land[i][1]] = new Struc('Windmill',
+        [land[i][0]-Math.floor(s / 2), land[i][1]-Math.floor(s / 2)]);
     }
 
     console.log(iter)

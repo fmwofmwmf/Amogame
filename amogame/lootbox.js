@@ -1,47 +1,46 @@
-const tile_rarity = [50,20,10,5,3,2,1,0.5,0.25]
 //{'C':50, 'UC':20, 'R':10, 'SR':5, 'SSR':3, 'SSSR':2, 'UR':1, 'UUR':0.5, 'Myth': 0.25}
-//contents: (type)
-// 1 - tile
-// 2 - card
-// 3 - consumable
-// 4 - resource
-//last:
-// [type, rarity]
-//rarity_chage:
-// [[rarity, delta]]
+
+
 /**
- * idk
- * @param {*} amt 
- * @param {*} contents 
- * @param {*} weights 
- * @param {*} tile_rarity 
- * @param {*} card_rarity 
- * @param {*} last 
+ * Given amount of items to return, the content of what items can be returned, these item's individual weights, the individual rarities of each tile and card's tiers, produce a random array of size amt with each element being an item produced.
+ * @param {number} amt 
+ * @param {number[]} contents [1,2,3,4,5] = [tile, card, consumable,shards,other] ie [1] for only tiles 
+ * @param {number[]} weights 
+ * @param {number[]} tile_rarity 
+ * @param {number[]} card_rarity 
+ * @param {number[][]} last [[type, rarity], ...]
  * @returns 
  */
-function loot(amt, contents, weights, tile_rarity, card_rarity, last=[]){
-   rolled = []
+function loot_roll(amt, contents, weights, tile_rarity=rarity, card_rarity=rarity, last=[]){
+   rolled = {tiles:[],cards:[],resources:[],shards:[],other:[]}
    for (let i = 0; i < amt; i++) {
-      if (i == amt - 1 && last.length > 0) {
-         rolled.push(last)
-      } else {
+      if (i<amt-1) {
          choice = which_content(weights, contents)
-         switch (choice) {
-            case 1:
-               tile_choice = which_content(tile_rarity, tiers)
-               rolled.push(generate_tile_rarity(tile_choice))
-               break;
-            case 2:
-               card_choice = which_content(card_rarity, tiers)
-               rolled.push(["Card", "Move 1 tile", card_choice])
-               break;
-            case 3:
-               rolled.push(["Resources"])
-               break;
-            default:
-               break;
-         }
+      } else {
+         choice = 1
       }
+      switch (choice) {
+         case 1:
+            tile_choice = which_content(tile_rarity, tiers)
+            rolled.tiles.push(generate_tile_rarity(tile_choice))
+            break;
+         case 2:
+            card_choice = which_content(card_rarity, tiers)
+            rolled.cards.push(new Card('structure', 'power', 0))
+            break;
+         case 3:
+            rolled.resources.push(["Resources"])
+            break;
+         case 4:
+            rolled.shards.push(["shard"])
+            break;
+         case 5:
+            rolled.other.push(["other"])
+            break;
+         default:
+            break;
+      }
+      
    }
    return rolled
 }
