@@ -14,8 +14,14 @@ body{
 }
 
 #navbar {
-    grid-column: 1/3;
+    grid-column: 2/3;
     grid-row: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#day {
+    grid-column: 3;
 }
 
 #main {
@@ -55,16 +61,6 @@ body{
     border-radius: 5px;
 }
 
-.hotbar-e {
-    display: inline-block;
-    border-style: solid;
-    margin: 0px 2px;
-    padding: 2px;
-}
-
-.hotbar-e-selected {
-    border-color: brown;
-}
 
 #canvas-cont {
     margin:1px;
@@ -221,7 +217,7 @@ body{
 
 #div2 {
     grid-template-columns: 80px 80px 1fr;
-    grid-template-rows: 20px 0fr;
+    grid-template-rows: 0fr 0fr;
     display: grid;
 }
 
@@ -292,28 +288,6 @@ body{
     transition: 0.1s;
 }
 
-.tooltip {
-    position: relative;
-}
-  
-  /* Tooltip text */
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-
-    background-color: rgba(50, 50, 50, 0.90);
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-   
-    position: absolute;
-    z-index: 1;
-}
-  
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-}
 
 /* TILES */
 
@@ -367,11 +341,6 @@ body{
     border: solid;
 }
 
-.tile-inv-e {
-    display: inline-block;
-    border: solid;
-    margin: 2px;
-}
 
 /* CARDS */
 

@@ -53,7 +53,7 @@ function shop(check, subtract, add) {
 function update_store() {
     store_items.forEach(e => {
         s = document.createElement('div')
-        s.classList = 'shop-e tooltip'
+        s.classList = 'shop-e tooltip button'
         s.innerHTML = `${e.desc1}`
         const info = document.createElement('span')
         info.innerHTML = `${e.price}<br>${e.gives}`
