@@ -239,7 +239,10 @@ body{
     grid-column: 2;
     grid-row: 1;
     border-style: solid;
-    display: grid;
+    margin-left: 10px;
+}
+
+.lootopen-e {
 }
 
 #lootcrates {
@@ -362,6 +365,12 @@ body{
 
     margin: 1px;
     border: solid;
+}
+
+.tile-inv-e {
+    display: inline-block;
+    border: solid;
+    margin: 2px;
 }
 
 /* CARDS */

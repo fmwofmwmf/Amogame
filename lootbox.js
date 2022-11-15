@@ -29,7 +29,8 @@ function loot_roll(amt, contents, weights, tile_rarity=rarity, card_rarity=rarit
             rolled.cards.push(new Card('structure', 'power', 0))
             break;
          case 3:
-            rolled.resources.push(["Resources"])
+            res_choice = which_content([1,1,1,1], ['woods', 'stones', 'blue triangles', 'waters'])
+            rolled.resources.push(res_choice)
             break;
          case 4:
             rolled.shards.push(["shard"])

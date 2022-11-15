@@ -81,9 +81,9 @@ function refresh_loot() {
             loot.addEventListener('click', e=>{
                 lootcrates[i]--;
                 refresh_loot()
-                const loot = loot_roll(10,[1,2,3,4,5],[1,5,10,70,5], box_tile_odd[i], box_tile_odd[i])
+                const loot = loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[i], box_tile_odd[i])
                 add_loot(loot)
-
+                lootinfo.innerHTML = loot_recap(loot)
                 display_inv()
                 display_cinv()
             })
@@ -91,8 +91,44 @@ function refresh_loot() {
         loot_count.appendChild(loot)
     }
 }
-
 refresh_loot()
+
+function loot_recap(loot) {
+    let out = {'tiles':{},'cards':{},'res':{},'shards':{}}
+    for (const k in loot) {
+        if (loot[k].length>0) {
+            console.log(loot[k])
+            loot[k].forEach(e => {
+                switch (k) {
+                    case 'tiles':
+                        const y = e.getName()
+                        out['tiles'][`${y.tier} ${y.name} ${y.stars}`] = 1
+                        break;
+                    case 'cards':
+                        out['cards']['card'] = out['cards']['card'] + 1 || 1;
+                        break;
+                    case 'resources':
+                        out['res'][e] = out['res'][e] + 1 || 1
+                        break;
+                    case 'shards':
+                        out['shards'][e] = out['shards'][e] + 1 || 1;
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+    }
+    let st=''
+    const col = {'tiles':'cornsilk','cards':'azure', 'res':'white', 'shards':'white'}
+    for (const i in out) {
+        for (const j in out[i]) {
+            st += `<div class='lootopen-e' style='background-color:${col[i]};'>
+            ${out[i][j]}× ${j}</div>`
+        }
+    }
+    return st
+}
 
 function add_loot(crate) {
     console.log(crate)
