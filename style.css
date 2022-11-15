@@ -66,20 +66,18 @@ body{
     margin:1px;
     grid-column: 1;
     grid-row: 2/4;
-    border-style: solid;
     display: grid;
+    justify-content: center;
 }
 
 #land {
-    margin-left: auto;
-    margin-right: auto;
+    margin: 10px;
     grid-row: 1;
     grid-column: 1;
 }
 
 #biome {
-    margin-left: auto;
-    margin-right: auto;
+    margin: 10px;
     grid-row: 1;
     grid-column: 1;
 }
