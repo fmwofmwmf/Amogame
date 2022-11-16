@@ -1,6 +1,6 @@
 body{
     display: grid;
-    grid-template-columns: 0.2fr 3fr 0.2fr;
+    grid-template-columns: 0.3fr 3fr 0.3fr;
     user-select: none;
 }
 
@@ -185,14 +185,14 @@ body{
     display: grid;
 }
 
-#tile-view {
+/* #tile-view {
     grid-column: 1;
     grid-row: 1;
 
     text-align: center;
     margin: 1px;
     border: solid;
-}
+} */
 
 
 #tile-view-m {

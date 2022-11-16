@@ -43,4 +43,4 @@ class Biomes extends Map {
     }
 }
 
-const biome_grid = new Biomes(30, 20, 10, document.getElementById('biome'))
+const biome_grid = new Biomes(30, 20, 15, document.getElementById('biome-canvas'))

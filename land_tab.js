@@ -334,4 +334,4 @@ function add_struct_info(element, pos, draw=false) {
     }
 }
 
-const land_grid = new Land(30, 20, 10, document.getElementById('land'))
+const land_grid = new Land(30, 20, 15, document.getElementById('land-canvas'))
