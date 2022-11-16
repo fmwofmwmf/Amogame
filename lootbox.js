@@ -59,7 +59,7 @@ function generate_tile_rarity(rarity, bime=-1) {
    } else {
       max_size = c_to_t[ind+1]
    }
-   return generate_tile(randint(c_to_t[ind], max_size), ind+1, bime)
+   return generate_tile(Math.max(randint(c_to_t[ind], max_size), 5), ind+1, bime)
 }
 
 /**

@@ -9,6 +9,29 @@ function generate_empty_map(w, h) {
     return arr
 }
 
+function generate_connect(count) {
+    const m = generate_empty_map(count*2, count*2);
+    const nx = [0,0,1,-1]
+    const ny = [1,-1,0,0]
+    let visited = [];
+    let next = [[count, count]];
+    while (visited.length < count) {
+        next.sort(() => Math.random() - 0.5)
+        const q = next[0]
+        visited.push(q)
+        next.shift()
+        m[q[0]][q[1]] = {c:1}
+        for (let i = 0; i < 4; i++) {
+            const e = [q[0]+nx[i], q[1]+ny[i]]
+            const thesame = (el) => {return el[0]==e[0] && el[1]==e[1]}
+            if (!visited.some(thesame)
+            && !next.some(thesame)) {
+                next.push(e)
+            }
+        }
+    }
+    return new Tile(count*2, count*2, [count, count], 1, m, tnames)
+}
 
 /**
  * Generates a Tile
@@ -39,13 +62,12 @@ function generate_tile(count, struct, bime=-1) {
         }
     }
 
-    land.sort(() => Math.random() - Math.random())
+    land.sort(() => Math.random() - 0.5)
     for (let i = 0; i < struct; i++) {
         arr[land[i][0]][land[i][1]] = new Struc('Windmill',
         [land[i][0]-Math.floor(s / 2), land[i][1]-Math.floor(s / 2)]);
     }
 
-    console.log(iter)
     return new Tile(s, s, [Math.floor(s / 2), Math.floor(s / 2)], bime+1, arr)
 }
 

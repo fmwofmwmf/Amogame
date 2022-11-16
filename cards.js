@@ -60,10 +60,11 @@ class CardHolder {
         }
         this.card = null
         this.open = false
+        this.tryunlock()
     }
 
     tryunlock() {
-        if (this.unlock(this.container)) {
+        if (this.restrictions.unlock(this.container)) {
             this.open = true;
         }
     }
@@ -72,17 +73,31 @@ class CardHolder {
         const civ = document.createElement('div')
         civ.classList = 'card '
         
-        const info = document.createElement('span')
-        info.innerHTML = `stuff<br>stuff`
-        info.classList = 'cardinfo'
         if (!this.open) {
             civ.classList += 'lockcard '
-            info.innerHTML = `not available yet`
-        } else if (this.card == null) {
-            civ.classList += 'nocard '
-            info.innerHTML = `add a card`
+        } else {
+            const info = document.createElement('span')
+            info.innerHTML = `add stuff<br>`
+            info.classList = 'cardhold-select'
+
+            if (this.card == null) {
+                civ.classList += 'nocard '
+            }
+            const valid = filter_cinv().structure
+
+            valid.forEach(e => {
+                const v = document.createElement('div')
+                v.innerHTML = `${e.getInfo()}`
+                v.classList = 'cardhold-select-e'
+                v.addEventListener('click', e=>{
+
+                })
+                info.appendChild(v)
+            });
+
+            civ.appendChild(info)
         }
-        civ.appendChild(info)
+        
         return civ
     }
 }

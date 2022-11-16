@@ -18,7 +18,6 @@ function switch_tabs(name) {
     Array.from(main.children).forEach(e=>{
         if (e.id==name) {
             e.style.display = 'grid'
-            
         } else {
             e.style.display = 'none'
         }

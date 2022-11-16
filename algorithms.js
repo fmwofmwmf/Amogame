@@ -44,7 +44,7 @@ function gen_connect(bounds, start, eq) {
     
     while (count<1000 && q.length>0) {
         if (eq(q[0])) {
-          for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 4; i++) {
                 e = [q[0][0]+nx[i], q[0][1]+ny[i]]
                 const thesame = (el) => {return el[0]==e[0] && el[1]==e[1]}
                 if (val(e[0], e[1], bounds)

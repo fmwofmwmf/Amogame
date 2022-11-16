@@ -1,6 +1,7 @@
 body{
     display: grid;
     grid-template-columns: 0.2fr 3fr 0.2fr;
+    user-select: none;
 }
 
 #money {
@@ -103,21 +104,28 @@ body{
 }
   
   /* Tooltip text */
-.card .cardinfo {
+.card .cardhold-select {
     visibility: hidden;
     width: 120px;
-    background-color: rgba(50, 50, 50, 0.90);
-    color: #fff;
+    height: 100px;
+    left: 110%;
+    background-color: white;
     text-align: center;
     padding: 5px 0;
     border-radius: 6px;
+    border-style: solid;
    
     position: absolute;
     z-index: 1;
 }
   
-.card:hover .cardinfo {
+.card:hover .cardhold-select {
     visibility: visible;
+}
+
+.cardhold-select-e {
+    border-style: solid;
+    margin:5px;
 }
 
 #Tileinfo {
@@ -373,7 +381,8 @@ body{
 .card-inv-e {
     width:100px;
     height:120px;
-    display:inline-block;
+    display:inline-flex;
+    justify-content: center;
     border-style: solid;
     margin: 1px;
 }

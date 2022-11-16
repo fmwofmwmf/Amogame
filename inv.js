@@ -86,6 +86,7 @@ function display_collection() {
 tile_slot.addEventListener('dragover', e=>{
     e.preventDefault()
 })
+
 tile_slot.addEventListener('drop', e=>{
     const i = e.dataTransfer.getData("index")
     if (selected_tile!=null) {
@@ -105,6 +106,19 @@ tile_slot.addEventListener('drop', e=>{
     })
     tile_slot.appendChild(d);
 })
+
+function filter_cinv() {
+    let y = {}
+    cinv.forEach(e => {
+        if (y[e.type] != undefined) {
+            y[e.type].push(e)
+        } else {
+            y[e.type] = [e]
+        }
+        
+    });
+    return y
+}
 
 function display_cinv() {
     card_col.innerHTML = ''
@@ -127,6 +141,7 @@ function display_cinv() {
 card_tree_m.addEventListener('dragover', e=>{
     e.preventDefault()
 })
+
 card_tree_m.addEventListener('drop', e=>{
     const i = e.dataTransfer.getData("index")
     if (selected_card!=null) {
