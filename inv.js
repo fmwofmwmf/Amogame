@@ -1,5 +1,5 @@
-const hbar = document.getElementById('hotbar')
-const card_col = document.getElementById('card-inv')
+const hbar = document.getElementById('inv-tile')
+const card_col = document.getElementById('inv-card')
 const tile_col = document.getElementById('tile-inv')
 const tile_slot = document.getElementById('tile-view-m')
 const card_tree_m = document.getElementById('card-tree-main')
@@ -62,50 +62,50 @@ function display_inv() {
         invHTML[i] = s;
         hbar.appendChild(s)
     }
-    display_collection()
+    // display_collection()
 }
 display_inv()
 
-function display_collection() {
-    tile_col.innerHTML = ''
-    collHTML = []
-    for (let i = 0; i < inv.length; i++) {
-        const e = inv[i];
-        const s = document.createElement('div');
-        s.className = 'tile-inv-e'
-        s.innerHTML=`${tiers[e.tier]}`
-        s.draggable = true;
-        s.addEventListener('dragstart', ev => {
-            ev.dataTransfer.setData("index", i);
-        })
-        collHTML[i] = s;
-        tile_col.appendChild(s)
-    }
-}
+// function display_collection() {
+//     tile_col.innerHTML = ''
+//     collHTML = []
+//     for (let i = 0; i < inv.length; i++) {
+//         const e = inv[i];
+//         const s = document.createElement('div');
+//         s.className = 'tile-inv-e'
+//         s.innerHTML=`${tiers[e.tier]}`
+//         s.draggable = true;
+//         s.addEventListener('dragstart', ev => {
+//             ev.dataTransfer.setData("index", i);
+//         })
+//         collHTML[i] = s;
+//         tile_col.appendChild(s)
+//     }
+// }
 
-tile_slot.addEventListener('dragover', e=>{
-    e.preventDefault()
-})
+// tile_slot.addEventListener('dragover', e=>{
+//     e.preventDefault()
+// })
 
-tile_slot.addEventListener('drop', e=>{
-    const i = e.dataTransfer.getData("index")
-    if (selected_tile!=null) {
-        inv.push(selected_tile)
-    }
-    selected_tile = inv[i]
-    inv.splice(i, 1)
-    display_inv()
-    displayTileInfo(selected_tile, tile_slot)
-    const d = document.createElement('span')
-    d.innerHTML = '-'
-    d.addEventListener('click', e=>{
-        inv.push(selected_tile);
-        selected_tile = null;
-        display_inv()
-        tile_slot.innerHTML = '';
-    })
-    tile_slot.appendChild(d);
-})
+// tile_slot.addEventListener('drop', e=>{
+//     const i = e.dataTransfer.getData("index")
+//     if (selected_tile!=null) {
+//         inv.push(selected_tile)
+//     }
+//     selected_tile = inv[i]
+//     inv.splice(i, 1)
+//     display_inv()
+//     displayTileInfo(selected_tile, tile_slot)
+//     const d = document.createElement('span')
+//     d.innerHTML = '-'
+//     d.addEventListener('click', e=>{
+//         inv.push(selected_tile);
+//         selected_tile = null;
+//         display_inv()
+//         tile_slot.innerHTML = '';
+//     })
+//     tile_slot.appendChild(d);
+// })
 
 function filter_cinv() {
     let y = {}
@@ -136,22 +136,23 @@ function display_cinv() {
         cinvHTML[i] = s;
         card_col.appendChild(s)
     }
+    console.log(card_col.innerHTML, "hey")
 }
 
-card_tree_m.addEventListener('dragover', e=>{
-    e.preventDefault()
-})
+// card_tree_m.addEventListener('dragover', e=>{
+//     e.preventDefault()
+// })
 
-card_tree_m.addEventListener('drop', e=>{
-    const i = e.dataTransfer.getData("index")
-    if (selected_card!=null) {
-        cinv.push(selected_card)
-    }
-    selected_card = cinv[i]
-    cinv.splice(i, 1)
-    display_cinv()
-    display_card()
-})
+// card_tree_m.addEventListener('drop', e=>{
+//     const i = e.dataTransfer.getData("index")
+//     if (selected_card!=null) {
+//         cinv.push(selected_card)
+//     }
+//     selected_card = cinv[i]
+//     cinv.splice(i, 1)
+//     display_cinv()
+//     display_card()
+// })
 
 function display_card() {
     card_tree_m.innerHTML = '';

@@ -1,11 +1,11 @@
-const loot_count = document.getElementById('lootcrates')
-const lootinfo = document.getElementById('lootopen')
+const loot_count = document.getElementById('inv-box')
+const lootinfo = document.getElementById('log-content')
 
-const shop_button = document.getElementById('shop-button')
-const boxes_button = document.getElementById('box-button')
+const shop_button = document.getElementById('shop-page')
+const boxes_button = document.getElementById('shop-page')
 
-const store = document.getElementById('shop')
-const boxes = document.getElementById('lootboxes')
+const store = document.getElementById('shop-page')
+const boxes = document.getElementById('shop-page')
 
 var lootboxes = {
     'T':{

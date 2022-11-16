@@ -15,14 +15,62 @@
     
     <div id="navbar">
         <div id="page1" class="button">World</div>
-        <div id="page2" class="button">Loot</div>
-        <div id="page3" class="button">Collection</div>
-        <div id="page4" class="button">Card tree</div>
+        <div id="page2" class="button">Shop</div>
+        <div id="page3" class="button">Games</div>
     </div>
     <div id="day" class="button">D</div>
     <div id="money"></div>
     <div id="main">
-        <div id="div1">
+        <div id="world-page">
+            <div id="canvas-container">
+                <div id="canvas-navbar" class="navbar">
+                    <!-- add nav buttons -->
+                </div>
+                <div id="canvas-content" class="container">
+                    <div id="tile-view">
+                        <canvas id="biome-canvas"></canvas>
+                        <canvas id="land-canvas"></canvas>
+                    </div>
+                     <!-- add content -->
+                </div>
+            </div>
+            <div id="display-container" class="container">
+                <div id="display-navbar" class="navbar">
+                    <div id="display-nav-tile-info" class="navbutton">Tile</div>
+                    <div id="display-nav-struct-info" class="navbutton">Struct</div>
+                </div>
+                <div id="display-content">
+                    <div id="display-tile-info">
+                        <div id="tile-info"></div>
+                    </div>
+                    <div id="display-tile-struct">
+                        <div id="struct-info"></div>
+                    </div>
+                     <!-- add content -->
+                </div>
+            </div>
+            <div id="log-container" class="container">
+                <div id="log-content"></div>
+            </div>
+            <div id="inv-container" class="container">
+                <div id="inv-navbar" class="navbar">
+                    <div id="inv-nav-tile" class="navbutton">Tiles</div>
+                    <div id="inv-nav-card" class="navbutton">Cards</div>
+                    <div id="inv-nav-box" class="navbutton">Boxes</div>
+                    <!-- add nav buttons -->
+                </div>
+                <div id="inv-content">
+                    <div id="inv-tile"></div>
+                    <div id="inv-card"></div>
+                    <div id="inv-box"></div>
+                </div>
+            </div>
+        </div>
+        <div id="shop-page"></div>
+        <div id="game-page"></div>
+    </div>
+
+        <!-- <div id="div1">
             <div id="canvas-cont">
                 <canvas id="biome"></canvas>
                 <canvas id="land"></canvas>
@@ -56,7 +104,7 @@
                 <div id="card-tree-main"></div>
             </div>
             <div id="card-inv"></div>
-        </div>
+        </div> -->
     </div>
     <script src="load.js"></script>
     <script src="algorithms.js"></script>
