@@ -7,7 +7,68 @@ const boxes_button = document.getElementById('box-button')
 const store = document.getElementById('shop')
 const boxes = document.getElementById('lootboxes')
 
-var lootcrates = [5,5,5,5,5,5,Infinity,Infinity]
+var lootboxes = {
+    'T':{
+        count:Infinity,
+        unbox:(c)=>{
+            return {tiles:[generate_connect(randint(4, 6)), generate_connect(randint(4,5))], cards:[], res:[], shards:[]}
+        },
+    },
+    'BT':{
+        count:Infinity,
+        unbox:(c)=>{
+            return {tiles:[generate_connect(randint(6, 15)), generate_connect(randint(4,5))], cards:[], res:[], shards:[]}
+        },
+    },
+    'F':{
+        count:Infinity,
+        unbox:(c)=>{
+            return loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[0], box_tile_odd[0])
+        },
+    },
+    'D':{
+        count:0,
+        unbox:(c)=>{
+            return loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[1], box_tile_odd[1])
+        },
+    },
+    'C':{
+        count:0,
+        unbox:(c)=>{
+            return loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[2], box_tile_odd[2])
+        },
+    },
+    'B':{
+        count:0,
+        unbox:(c)=>{
+            return loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[3], box_tile_odd[3])
+        },
+    },
+    'A':{
+        count:0,
+        unbox:(c)=>{
+            return loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[4], box_tile_odd[4])
+        },
+    },
+    'S':{
+        count:0,
+        unbox:(c)=>{
+            return loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[5], box_tile_odd[5])
+        },
+    },
+    'SS':{
+        count:Infinity,
+        unbox:(c)=>{
+            return loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[6], box_tile_odd[6])
+        },
+    },
+    'SSS':{
+        count:5,
+        unbox:(c)=>{
+            return loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[7], box_tile_odd[7])
+        },
+    },
+}
 
 const store_items = [
     {
@@ -19,8 +80,8 @@ const store_items = [
         updateRes()
         },
         add:()=>{
-            lootcrates[1]++;
-            refresh_loot();
+            lootboxes['D'].count++;
+            refresh_boxes();
         },
     },
     {
@@ -32,8 +93,8 @@ const store_items = [
         updateRes()
         },
         add:()=>{
-            lootcrates[2]++;
-            refresh_loot();
+            lootboxes['C'].count++;
+            refresh_boxes();
         },
     }
 ]
@@ -43,7 +104,6 @@ function shop(check, subtract, add) {
     if (check()) {
         subtract()
         add()
-        console.log(inv)
         return true
     } else {
         return false
@@ -69,19 +129,19 @@ function update_store() {
 }
 update_store()
 
-function refresh_loot() {
+function refresh_boxes() {
     loot_count.innerHTML = ''
-    for (let i = 0; i < lootcrates.length; i++) {
-        const l = lootcrates[i];
+    for (const name in lootboxes) {
+        const l = lootboxes[name]
         const loot = document.createElement('div')
-        loot.innerHTML = `[${grades[i]}] ${l}<br>`
+        loot.innerHTML = `[${name}] ${l.count}<br>`
         loot.className = 'crate'
-        if (l>0) {
+        if (l.count>0) {
             loot.className += ' cratee'
             loot.addEventListener('click', e=>{
-                lootcrates[i]--;
-                refresh_loot()
-                const loot = loot_roll(10,[1,2,3,4,5],[1,5,60,30,5], box_tile_odd[i], box_tile_odd[i])
+                l.count--;
+                refresh_boxes()
+                const loot = l.unbox(1)
                 add_loot(loot)
                 lootinfo.innerHTML = loot_recap(loot)
                 display_inv()
@@ -91,18 +151,18 @@ function refresh_loot() {
         loot_count.appendChild(loot)
     }
 }
-refresh_loot()
+refresh_boxes()
 
 function loot_recap(loot) {
     let out = {'tiles':{},'cards':{},'res':{},'shards':{}}
     for (const k in loot) {
         if (loot[k].length>0) {
-            console.log(loot[k])
             loot[k].forEach(e => {
                 switch (k) {
                     case 'tiles':
                         const y = e.getName()
-                        out['tiles'][`${y.tier} ${y.name} ${y.stars}`] = 1
+                        const id = `${y.tier} ${y.name} ${y.stars}`
+                        out['tiles'][id] = out['tiles'][id] +1 || 1;
                         break;
                     case 'cards':
                         out['cards']['card'] = out['cards']['card'] + 1 || 1;
@@ -131,7 +191,6 @@ function loot_recap(loot) {
 }
 
 function add_loot(crate) {
-    console.log(crate)
     crate.tiles.forEach(e => {
         inv.push(e)
     });

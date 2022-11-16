@@ -42,7 +42,7 @@ class Land extends Map {
         return bad
     }
 
-    remove(e) {
+    rem(e) {
         const a = this.tile_list.findIndex(el=>{return el.tile==e})
         this.tile_list.splice(a,1)
         console.log(this.tile_list, 'tiles')
@@ -188,6 +188,12 @@ class Land extends Map {
                 
             }
         })
+
+        this.c.addEventListener('dblclick', e=>{
+            if (this.map[this.m[0]][this.m[1]].c == 2) {
+                this.map[this.m[0]][this.m[1]].main.rem(Tileinfo)
+            }
+        })
     }
 }
 
@@ -263,18 +269,13 @@ function displayTileInfo(shape, node, rem=false) {
 
     node.style.borderColor = colors[shape.biome];
     //if center add remove button
-    if(rem) {
+    if (rem) {
         if (land_grid.tile_list.find(e=>{return e.tile==shape})) {
             let r = document.createElement('button')
             r.innerHTML = '<center>✕</center>'
             r.classList = 'tile-info-remove'
             r.addEventListener('click', e=>{
-                land_grid.remove(shape)
-                inv.push(shape)
-                display_inv()
-                land_grid.refresh()
-                node.innerHTML = 'Nothing'
-                node.style.borderColor = 'red'
+                shape.rem(node)
             })
             node.appendChild(r)
         }
@@ -314,7 +315,7 @@ function add_struct_info(element, pos, draw=false) {
             }
             displayTileInfo(element.main, TileInfo, true);
             StructInfo.innerHTML += `Center
-            <br>${biomenames[element.b]}`
+            <br>${biomenames[biome_grid.map[pos[0]][pos[1]]]}`
             break;
         case 3:
             StructInfo.innerHTML += element.getInfoCard()

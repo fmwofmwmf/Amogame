@@ -1,6 +1,6 @@
 
 class Tile {
-    constructor(w, h, c, b, data) {
+    constructor(w, h, c, b, data, n=names) {
         this.w = w
         this.h = h
         this.center = c;
@@ -9,9 +9,9 @@ class Tile {
         this.data[c[0]][c[1]].c = 2
         this.data[c[0]][c[1]].main = this
         this.contents = {count:[], struct:[]}
-        this.cards = [new CardHolder(), new CardHolder(), new CardHolder()]
+        this.cards = [new CardHolder(this), new CardHolder(this), new CardHolder(this)]
 
-        this.name = names[randint(0, names.length)]
+        this.name = n[randint(0, n.length)]
 
         this.fixH()
         this.fixW()
@@ -53,6 +53,15 @@ class Tile {
         return true;
     }
 
+    rem(el) {
+        land_grid.rem(this)
+        inv.push(this)
+        display_inv()
+        land_grid.refresh()
+        el.innerHTML = 'Nothing'
+        el.style.borderColor = 'red'
+    }
+
     bindStruct() {
         for (let i = 0; i < this.w; i++) {
             for (let j = 0; j < this.h; j++) {
@@ -91,6 +100,7 @@ class Tile {
         this.tier = g
         this.stars = (this.contents.count[0]-c_to_t[g])
         this.rank = randint(0,125);
+        console.log(this, this.contents, this.tier)
     }
 
     getIncome() {
@@ -161,7 +171,7 @@ class Tile {
             name: this.name,
             stars: `${'✶'.repeat(Math.floor(this.stars/5))}${'★'.repeat(this.stars%5)}`,
             rank: `${Math.floor(this.rank/25)}✦  ${this.rank%25>4? '+'+this.rank%25 : '+'.repeat(this.rank%25)}`,
-            ratio: `${this.contents.count[0]}/${this.w*this.h}`,
+            ratio: `${this.contents.count[0]}/(${this.w}×${this.h})`,
         }
         
     }
@@ -237,7 +247,7 @@ class Struc {
         this.b = b;
         this.cpos = pos
         this.income = 0;
-        this.cards = []
+        this.cards = [new CardHolder(this), new CardHolder(this), new CardHolder(this)]
         this.level = 1
         this.grade = randint(0,grades.length)
         this.main = null;

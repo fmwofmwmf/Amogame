@@ -1,4 +1,4 @@
-const c_to_t = [5, 10, 15, 20, 30, 40, 50, 65, 80, 90, 100]
+const c_to_t = [0, 10, 15, 20, 30, 40, 50, 65, 80, 90, 100]
 const tiers = [
     'C',
     'UC', 
@@ -23,6 +23,15 @@ const names = [
     'daniel dreammask',
     'vincent dreammask',
     'william dreammask',
+]
+const tnames = [
+    'div',
+    'biv',
+    'tiv',
+    'riv',
+    'niv',
+    'giv',
+    'wiv'
 ]
 const borders = ['black', 'grey', 'yellow', 'gold', 'red'];
 const grades = ['F', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS'];
