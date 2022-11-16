@@ -71,7 +71,7 @@ class CardHolder {
 
     display() {
         const civ = document.createElement('div')
-        civ.classList = 'card '
+        civ.classList = 'card tooltip '
         
         if (!this.open) {
             civ.classList += 'lockcard '

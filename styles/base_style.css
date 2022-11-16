@@ -1,0 +1,105 @@
+/* General */
+
+.button {
+   background-color: white;
+   border: 1px solid black;
+   margin: 2px 5px;
+   padding: 2px 10px;
+   border-radius: 2px;
+   text-align: center;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.button:hover {
+   transition: 0.3s ease;
+   background-color: #ddd;
+   cursor: pointer;
+}
+
+.button:active {
+   background-color: #aaa;
+}
+
+#navbar > .button {
+   border: none;
+}
+
+#div2 > .left > .button {
+   border: none;
+   padding: 2px 0px;
+   border-bottom: 2px solid black;
+}
+
+#div2 > .left > .button:hover {
+   background: linear-gradient(0deg, #eee, rgba(170, 170, 170, 0) 60%);
+}
+
+#div2 > .left > .button:active {
+   background: #eee
+}
+
+
+/* tile selectables */
+.hotbar-e , .tile-inv-e {
+   padding: 2px 5px;
+   display: inline-block;
+   border: 2px solid;
+   border-color: black;
+   margin: 2px;
+   border-radius: 5px;
+}
+
+.hotbar-e-selected {
+   border-color: rgb(160, 64, 28);
+}
+
+:not(.hotbar-e-selected).hotbar-e:hover, .tile-inv-e:hover {
+   border-color: rgb(150, 110, 96);
+}
+
+
+/* card selectables */
+.card-inv-e {
+   width:100px;
+   height:120px;
+   display:inline-flex;
+   justify-content: center;
+   border-style: solid;
+   margin: 1px;
+}
+
+.card-inv-e:hover {
+   border-color: rgb(150, 110, 96);
+}
+
+
+/* tool tips */
+
+.tooltip {
+   position: relative;
+}
+ 
+.tooltip .tooltiptext {
+   visibility: hidden;
+   width: 120px;
+
+   background-color: rgba(50, 50, 50, 0.90);
+   color: #fff;
+   text-align: center;
+   padding: 5px 0;
+   border-radius: 6px; 
+  
+   position: absolute;
+   left: 50%;
+   transform: translate(-50%, 0);
+   top: calc(100% + 3px);
+   z-index: 1;
+}
+ 
+.tooltip:hover .tooltiptext {
+   visibility: visible;
+}
+

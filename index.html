@@ -5,8 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>the</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-    <link href="base_style.css" rel="stylesheet" type="text/css" />
+    <link href="styles/style.css" rel="stylesheet" type="text/css" />
+    <link href="styles/base_style.css" rel="stylesheet" type="text/css" />
+    <link href="styles/home_page.css" rel="stylesheet" type="text/css" />
+    <link href="styles/loot_page.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -21,18 +23,21 @@
     <div id="money"></div>
     <div id="main">
         <div id="div1">
-            <div id="hotbar"></div>
             <div id="canvas-cont">
                 <canvas id="biome"></canvas>
                 <canvas id="land"></canvas>
             </div>
-            
-            <div id="Tileinfo" style="border-color:black;">nuffin</div>
-            <div id="Structinfo" style="border-color:black;">nothing</div>
+            <div id="hotbar"></div>
+            <div class="right">
+                <div id="Tileinfo"></div>
+                <div id="Structinfo"></div>
+            </div>
         </div>
         <div id="div2">
-            <div id="shop-button" class="button">shop</div>
-            <div id="box-button" class="button">boxes</div>
+            <div class="left">
+                <div id="shop-button" class="button">Shop</div>
+                <div id="box-button" class="button">Boxes</div>
+            </div>
             <div id="lootboxes" style="display:none;">
                 <div id="lootopen"></div>
                 <div id="lootcrates"></div>

@@ -200,7 +200,7 @@ function add_loot(crate) {
 }
 
 shop_button.addEventListener('click', e=>{
-    store.style.display = 'block'
+    store.style.display = 'grid'
     boxes.style.display = 'none'
 })
 
