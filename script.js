@@ -403,11 +403,13 @@ let eco = {
 }
 
 function updateRes() {
-    let s = ``
+    resources.innerHTML = ''
     for (const k in eco) {
-        s += `${k}: ${eco[k]} `
+        let s = document.createElement('p')
+        s.classList += "resource"
+        s.innerHTML = `${k}: ${eco[k]} `
+        resources.appendChild(s)
     }
-    resources.innerHTML = s
 }
 updateRes()
 

@@ -70,11 +70,11 @@ class CardHolder {
 
     display() {
         const civ = document.createElement('div')
-        civ.classList = 'card '
+        civ.classList = 'card tooltip '
         
         const info = document.createElement('span')
         info.innerHTML = `stuff<br>stuff`
-        info.classList = 'cardinfo'
+        info.classList = 'tooltiptext'
         if (!this.open) {
             civ.classList += 'lockcard '
             info.innerHTML = `not available yet`
