@@ -1,4 +1,3 @@
-
 class Tile {
     constructor(w, h, c, b, data, n=names) {
         this.w = w
@@ -12,6 +11,7 @@ class Tile {
         this.cards = [new CardHolder(this), new CardHolder(this), new CardHolder(this)]
 
         this.name = n[randint(0, n.length)]
+        this.area = null;
 
         this.fixH()
         this.fixW()
@@ -21,6 +21,21 @@ class Tile {
 
         this.calcGrade();
         this.global = null;
+
+        this.progresses = []
+        this.ticks = 0
+        this.maxticks = 10
+    }
+
+    time(t) {
+        this.ticks+=t;
+        if (this.ticks>=this.maxticks) {
+            this.ticks = 0
+            addeco(this.getIncome())
+        }
+        this.progresses.forEach(p => {
+            p.value = this.ticks
+        });
     }
 
     plot(x, y, w, h, inp_map) {
@@ -53,13 +68,14 @@ class Tile {
         return true;
     }
 
-    rem(el) {
-        land_grid.rem(this)
+    rem(area, e) {
+        area.rem(this)
         inv.push(this)
         display_inv()
-        land_grid.refresh()
-        el.innerHTML = 'Nothing'
-        el.style.borderColor = 'red'
+        this.area=null;
+        area.refresh()
+        e.innerHTML = 'Nothing'
+        e.style.borderColor = 'red'
     }
 
     bindStruct() {
@@ -263,6 +279,25 @@ class Struc {
         }
     }
 
+    /**
+     * 
+     * @param {string} str t for tile, m for area, b for biome
+     * @returns 
+     */
+    up(str) {
+        switch (str) {
+            case 't':
+               return this.main
+            case 'm':
+               return this.main.area
+            case 'b':
+               return this.main.area.biome_map
+        
+            default:
+                break;
+        }
+    }
+
     upgrade() {
         if (this.grade==grades.length-1 && this.level==100)
             return
@@ -276,12 +311,10 @@ class Struc {
 
     getIncome() {
         const c = [this.cpos[0]+this.main.global[0]+this.main.center[0],
-        this.cpos[1]+this.main.global[1]+this.main.center[1]]
-
-        const out = gen_connect([0, 0, land_grid.w, land_grid.h],
-            c, e=>{return biome_grid.map[e[0]][e[1]]==biome_grid.map[c[0]][c[1]] &&
-                 land_grid.map[e[0]][e[1]].c!=0})
-
+        this.cpos[1]+this.main.global[1]+this.main.center[1]]        
+        const out = gen_connect([0, 0, this.main.area.w, this.main.area.h],
+            c, e=>{return this.up('b').map[e[0]][e[1]]==this.up('b').map[c[0]][c[1]] &&
+                this.main.area.map[e[0]][e[1]].c!=0})
         return out.length
     }
 
@@ -292,7 +325,7 @@ class Struc {
         this.cpos[1]+this.main.global[1]+this.main.center[1]]
 
         return `[${grades[this.grade]}] Lv.${this.level} ${this.type}
-        <br> ${biomenames[biome_grid.map[coord[0]][coord[1]]]}`
+        <br> ${biomenames[this.up('b').map[coord[0]][coord[1]]]}`
     }
 }
 

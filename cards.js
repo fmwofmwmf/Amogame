@@ -4,12 +4,14 @@ const funs = {
             {
                 name:'Windmill',
                 level:1,
-                function:e=>{},
+                func:e=>{},
+                upcost:(c)=>{return {'energy':10*c.data.level}}
             }, 
             {
                 name:'Big Windmill',
                 level:1,
-                function:e=>{},
+                func:e=>{},
+                upcost:(c)=>{return {'energy':15*c.data.level}}
             }, 
         ],
         'wood':[
@@ -20,12 +22,20 @@ const funs = {
     'modifier-t':{},
     'modifier-s':{},
     'branch':{
-        '2-fork':{
-
-        },
-        '3-fork':{
-
-        }
+        '2-fork':[
+            ,{
+                name:'fork',
+                level:1,
+                function:e=>{},
+                init:(c)=>{return new CardHolder(c, grade_r = 0)}
+            },
+            {
+                name:'forkk',
+                level:1,
+                function:e=>{},
+                init:(c)=>{return new CardHolder(c, grade_r = 1)}
+            },
+        ]
     },
 }
 
@@ -37,11 +47,33 @@ class Card {
         this.type = type;
         this.stype = subtype;
         this.tier = tier;
-        this.data = funs[type][subtype][tier]
+        this.data = {
+            ...funs[type][subtype][tier]
+        }
+    }
+
+    upgrade() {
+        let y = true
+        console.log(this.data)
+        const cost = this.data.upcost(this)
+        for (const k in cost) {
+            if (eco[k]<cost[k]) {
+                y = false
+            }
+        }
+        if (y) {
+            this.data.level ++;
+            for (const k in cost) {
+                (eco[k]-=cost[k])
+            }
+            updateRes();
+        }
+        console.log(y)
+        return y
     }
 
     getInfo() {
-        return `${grades[this.tier]} ${this.data.name}`
+        return `${grades[this.tier]} ${this.data.name} Lv.${this.data.level}`
     }
 }
 
@@ -49,7 +81,7 @@ class CardHolder {
     /**
      * 
      * @param {*} type_r accepted types
-     * @param {*} grade_r min grade
+     * @param {*} grade_r max grade
      */
     constructor(cont, type_r=null, grade_r=null, unlock=null) {
         this.container = cont;
@@ -77,13 +109,32 @@ class CardHolder {
             civ.classList += 'lockcard '
         } else {
             const info = document.createElement('span')
-            info.innerHTML = `stuff<br>`
+            
             info.classList = 'cardhold-select'
 
             if (this.card == null) {
                 civ.classList += 'nocard '
+            } else {
+                info.innerHTML = `${this.card.getInfo()}`
             }
 
+            civ.addEventListener('dragover', e=>{
+                e.preventDefault()
+            })
+            
+            civ.addEventListener('drop', e=>{
+                const t = e.dataTransfer.getData("type")
+                console.log(t)
+                const i = e.dataTransfer.getData("index")
+                if (this.card!=null) {
+                    cinv.push(this.card)
+                }
+                this.card = cinv[i]
+                cinv.splice(i, 1)
+                display_cinv()
+                civ.classList = 'card tooltip '
+                info.innerHTML = `${this.card.getInfo()}`
+            })
 
             civ.appendChild(info)
         }

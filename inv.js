@@ -1,13 +1,13 @@
 const hbar = document.getElementById('inv-tile')
 const card_col = document.getElementById('inv-card')
 const tile_col = document.getElementById('tile-inv')
-const tile_slot = document.getElementById('tile-view-m')
+const tile_slot = document.getElementById('tile-view-main')
 const card_tree_m = document.getElementById('card-tree-main')
 
 var collHTML = []
 
 var selected_card = null
-var cinv = [new Card('structure', 'power', 0), new Card('structure', 'power', 1)]
+var cinv = [new Card('structure', 'power', 0), new Card('structure', 'power', 0), new Card('structure', 'power', 1)]
 var cinvHTML = []
 var selected_tile = null
 var c_tree_selected = -1
@@ -40,7 +40,7 @@ function select(j) {
             invHTML[selected].className = "hotbar-e"
         invHTML[j].className = "hotbar-e hotbar-e-selected"
         selected = j
-        displayTileInfo(inv[j], TileInfo, true)
+        displayTileInfo(inv[j], TileInfo, null, true)
     }
 }
 
@@ -132,6 +132,7 @@ function display_cinv() {
         s.draggable = true;
         s.addEventListener('dragstart', ev => {
             ev.dataTransfer.setData("index", i);
+            ev.dataTransfer.setData("type", e.type);
         })
         cinvHTML[i] = s;
         card_col.appendChild(s)
@@ -139,26 +140,46 @@ function display_cinv() {
     console.log(card_col.innerHTML, "hey")
 }
 
-// card_tree_m.addEventListener('dragover', e=>{
-//     e.preventDefault()
-// })
+card_tree_m.addEventListener('dragover', e=>{
+    e.preventDefault()
+})
 
-// card_tree_m.addEventListener('drop', e=>{
-//     const i = e.dataTransfer.getData("index")
-//     if (selected_card!=null) {
-//         cinv.push(selected_card)
-//     }
-//     selected_card = cinv[i]
-//     cinv.splice(i, 1)
-//     display_cinv()
-//     display_card()
-// })
+card_tree_m.addEventListener('drop', e=>{
+    const i = e.dataTransfer.getData("index")
+    if (selected_card!=null) {
+        cinv.push(selected_card)
+    }
+    selected_card = cinv[i]
+    cinv.splice(i, 1)
+    display_cinv()
+    display_card()
+})
 
 function display_card() {
     card_tree_m.innerHTML = '';
     const s = document.createElement('div');
     s.className = 'tile-tree-e'
     s.innerHTML=`${selected_card.getInfo()}`
+    const up = document.createElement('div')
+    up.className = 'button'
+    up.innerHTML = '+'
+    up.addEventListener('click', e=>{
+        if (selected_card.upgrade()) {
+            display_card()
+        }
+    })
+    
+    const down = document.createElement('div')
+    down.className = 'button'
+    down.innerHTML = '-'
+    down.addEventListener('click', e=>{
+        cinv.push(selected_card)
+        selected_card = null
+        card_tree_m.innerHTML = '';
+        display_cinv()
+    })
+    s.appendChild(up)
+    s.appendChild(down)
     card_tree_m.appendChild(s)
 }
 

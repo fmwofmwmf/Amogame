@@ -24,12 +24,24 @@
         <div id="world-page">
             <div id="canvas-container">
                 <div id="canvas-navbar" class="navbar">
-                    <!-- add nav buttons -->
+                    <div id="canvas-nav-w1" class="navbutton">A1</div>
+                    <div id="canvas-nav-w2" class="navbutton">A2</div>
+                    <div id="canvas-nav-w3" class="navbutton">A3</div>
                 </div>
                 <div id="canvas-content" class="container">
                     <div id="tile-view">
-                        <canvas id="biome-canvas"></canvas>
-                        <canvas id="land-canvas"></canvas>
+                        <div id='w1' class="areas">
+                            <canvas id="biome-canvas-w1" class="biome-canvas"></canvas>
+                            <canvas id="land-canvas-w1" class="land-canvas"></canvas>
+                        </div>
+                        <div id="w2" class="areas">
+                            <canvas id="biome-canvas-w2" class="biome-canvas"></canvas>
+                            <canvas id="land-canvas-w2" class="land-canvas"></canvas>
+                        </div>
+                        <div id="w3" class="areas">
+                            <canvas id="biome-canvas-w3" class="biome-canvas"></canvas>
+                            <canvas id="land-canvas-w3" class="land-canvas"></canvas>
+                        </div>
                     </div>
                      <!-- add content -->
                 </div>
@@ -38,13 +50,23 @@
                 <div id="display-navbar" class="navbar">
                     <div id="display-nav-tile-info" class="navbutton">Tile</div>
                     <div id="display-nav-struct-info" class="navbutton">Struct</div>
+                    <div id="display-nav-card-info" class="navbutton">Card</div>
                 </div>
                 <div id="display-content">
                     <div id="display-tile-info">
-                        <div id="tile-info"></div>
+                        <div id="tile-info">
+
+                        </div>
                     </div>
                     <div id="display-tile-struct">
-                        <div id="struct-info"></div>
+                        <div id="struct-info">
+
+                        </div>
+                    </div>
+                    <div id="display-tile-card">
+                        <div id="card-info">
+                            <div id="card-tree-main"></div>
+                        </div>
                     </div>
                      <!-- add content -->
                 </div>
@@ -67,7 +89,9 @@
             </div>
         </div>
         <div id="shop-page"></div>
-        <div id="game-page"></div>
+        <div id="game-page">
+            <canvas id="game-1-canvas"></canvas>
+        </div>
     </div>
 
         <!-- <div id="div1">
@@ -111,8 +135,8 @@
     <script src="generation.js"></script>
     <script src="cards.js"></script>
     <script src="script.js"></script>
-    <script src="land_tab.js"></script>
     <script src="biome_tab.js"></script>
+    <script src="land_tab.js"></script>
     <script src="loot.js"></script>
     <script src="lootbox.js"></script>
     <script src="interaction.js"></script>

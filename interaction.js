@@ -37,42 +37,53 @@ class NavBar {
             }
             this.tabs.push(tab)
         }
+        this.switch_tab(0)
     }
 
     switch_tab(index){
         for (let i = 0; i < this.tabs.length; i++) {
             const tab = this.tabs[i];
+            const nav = this.navs[i];
             if (i == index) {
                 tab.style.display = this.specif[index]
+                nav.style.backgroundColor = '#eee';
             }
             else {
                 tab.style.display = "none"
+                nav.style.backgroundColor = 'white';
             }
         }
     }
 }
 
-let main_navbar = new NavBar(["page1", "page2", "page3"],
+const main_navbar = new NavBar(["page1", "page2", "page3"],
                             ["world-page", "shop-page", "game-page"],
                             ["grid", "grid", "grid"])
 
+const area_navbar = new NavBar(["canvas-nav-w1", "canvas-nav-w2", "canvas-nav-w3"],
+                            ["w1", "w2", "w3"],
+                            ["grid", "grid", "grid"])
 
-let inv_navbar = new NavBar(["inv-nav-tile", "inv-nav-card","inv-nav-box"],
+const inv_navbar = new NavBar(["inv-nav-tile", "inv-nav-card","inv-nav-box"],
                             ["inv-tile", "inv-card", "inv-box"],
                             ["block", "block", "block"])
 
-let display_navbar = new NavBar(["display-nav-tile-info", "display-nav-struct-info"],
-                            ["display-tile-info", "display-tile-struct"],
-                            ["grid", "grid"])
+const display_navbar = new NavBar(["display-nav-tile-info", "display-nav-struct-info", "display-nav-card-info"],
+                            ["display-tile-info", "display-tile-struct", "display-tile-card"],
+                            ["grid", "grid", "grid"])
 
 
-// nextday.addEventListener('click', (e) => {
-//     const land_eco = land_grid.get_income()
-//     for (const k in land_eco) {
-//         eco[k] += land_eco[k]
-//     }
-//     updateRes();
-// })
+nextday.addEventListener('click', (e) => {
+    const land_eco = land_gride.get_income()
+    addeco(land_eco)
+})
+
+function addeco(ob) {
+    for (const k in ob) {
+        eco[k] += ob[k]
+    }
+    updateRes();
+}
 
 // function switch_tabs(name) {
 //     Array.from(main.children).forEach(e=>{
