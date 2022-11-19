@@ -77,23 +77,13 @@ class CardHolder {
             civ.classList += 'lockcard '
         } else {
             const info = document.createElement('span')
-            info.innerHTML = `add stuff<br>`
+            info.innerHTML = `stuff<br>`
             info.classList = 'cardhold-select'
 
             if (this.card == null) {
                 civ.classList += 'nocard '
             }
-            const valid = filter_cinv().structure
 
-            valid.forEach(e => {
-                const v = document.createElement('div')
-                v.innerHTML = `${e.getInfo()}`
-                v.classList = 'cardhold-select-e'
-                v.addEventListener('click', e=>{
-
-                })
-                info.appendChild(v)
-            });
 
             civ.appendChild(info)
         }
