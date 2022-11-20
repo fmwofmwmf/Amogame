@@ -175,7 +175,7 @@ class Land extends Map {
             const cb = this.c.getBoundingClientRect()
             const w = Math.floor((e.clientX-cb.left)/this.size)
             const h = Math.floor((e.clientY-cb.top)/this.size)
-            if ((w!=this.m[0] || h!=this.m[1]) && w>-1 && h>-1) {
+            if ((w!=this.m[0] || h!=this.m[1]) && w>-1 && h>-1 && this.selected[0]==-1) {
                 this.user_overlay(w, h)
             }
         })
@@ -205,17 +205,20 @@ class Land extends Map {
 
         this.c.addEventListener('dblclick', e=>{
             if (this.map[this.m[0]][this.m[1]].c == 2) {
-                this.map[this.m[0]][this.m[1]].main.rem(TileInfo)
+                this.map[this.m[0]][this.m[1]].main.rem(this, TileInfo)
             }
         })
     }
 }
+
+var current_tile = null
 
 /**
  * 
  * @param {Tile} shape Tile to display info of
  */
 function displayTileInfo(shape, node, area, rem=false) {
+    current_tile = shape
     node.innerHTML = ''
     const info = shape.getName()
 
@@ -319,6 +322,8 @@ function cycle_button() {
 
 }
 
+
+var current_struc = null
 /**
  * Displays info about a grid element
  * @param {Struc}   element Struc to display
@@ -326,6 +331,7 @@ function cycle_button() {
  */
 function add_struct_info(element, pos, area, draw=false) {
     StructInfo.innerHTML = `(${pos[0]+1}, ${pos[1]+1})<br>`
+    current_struc = null
     switch (element.c) {
         case 1:
             StructInfo.innerHTML += biomenames[area.biome_map.map[pos[0]][pos[1]]]
@@ -340,6 +346,7 @@ function add_struct_info(element, pos, area, draw=false) {
             <br>${biomenames[area.biome_map.map[pos[0]][pos[1]]]}`
             break;
         case 3:
+            current_struc = element
             display_navbar.switch_tab(1)
             StructInfo.innerHTML = `(${pos[0]+1}, ${pos[1]+1}) ${biomenames[area.biome_map.map[pos[0]][pos[1]]]}`
             StructInfo.appendChild(element.getInfoCard(pos))
@@ -356,6 +363,15 @@ class Area extends Land {
         this.container = document.getElementById(container);
         this.biome_map = new Biomes(w, h, s, document.getElementById(canvas_biome))
         this.nobiome()
+    }
+
+    resize(w, h) {
+        this.container.width = w
+        this.container.height = h
+        this.size = Math.min(w/this.w, h/this.h)
+        this.refresh()
+        this.biome_map.size = this.size
+        this.biome_map.refresh()
     }
 
     nobiome() {
@@ -386,8 +402,10 @@ const siz = [[15, 10], [30, 20], [70, 20]]
 
 for (let i = 0; i < 3; i++) {
     const s = Math.min(restrict[0]/siz[i][0], restrict[1]/siz[i][1])
-    new Area(siz[i][0], siz[i][1], s, `land-canvas-w${i+1}`, `biome-canvas-w${i+1}`, `w${i+1}`)
+    let y = new Area(siz[i][0], siz[i][1], s, `land-canvas-w${i+1}`, `biome-canvas-w${i+1}`, `w${i+1}`)
 }
+
+
 
 // const land_grid_w1 = new Area(30, 20, 15, 'land-canvas-w1', 'biome-canvas-w1')
 // const land_grid_w2 = new Area(50, 50, 15, 'land-canvas-w2', 'biome-canvas-w2')

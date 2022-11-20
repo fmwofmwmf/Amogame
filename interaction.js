@@ -18,6 +18,7 @@ class NavBar {
         this.tabscont = document.getElementById(tabid)
         this.tabs = this.tabscont.children
         this.specif = []
+        this.current = 0
 
         for (let i = 0; i < this.navs.length; i++) {
             const elem = this.navs[i];
@@ -30,10 +31,11 @@ class NavBar {
             const setstyle = elem.style.display
             this.specif.push((elem.style.display != "none") ? setstyle : '')
         }
-        this.switch_tab(0)
+        this.switch_tab(this.current)
     }
 
     switch_tab(index){
+        this.current = index
         for (let i = 0; i < this.tabs.length; i++) {
             const tab = this.tabs[i];
             const nav = this.navs[i];

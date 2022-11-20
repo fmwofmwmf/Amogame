@@ -66,47 +66,6 @@ function display_inv() {
 }
 display_inv()
 
-// function display_collection() {
-//     tile_col.innerHTML = ''
-//     collHTML = []
-//     for (let i = 0; i < inv.length; i++) {
-//         const e = inv[i];
-//         const s = document.createElement('div');
-//         s.className = 'tile-inv-e'
-//         s.innerHTML=`${tiers[e.tier]}`
-//         s.draggable = true;
-//         s.addEventListener('dragstart', ev => {
-//             ev.dataTransfer.setData("index", i);
-//         })
-//         collHTML[i] = s;
-//         tile_col.appendChild(s)
-//     }
-// }
-
-// tile_slot.addEventListener('dragover', e=>{
-//     e.preventDefault()
-// })
-
-// tile_slot.addEventListener('drop', e=>{
-//     const i = e.dataTransfer.getData("index")
-//     if (selected_tile!=null) {
-//         inv.push(selected_tile)
-//     }
-//     selected_tile = inv[i]
-//     inv.splice(i, 1)
-//     display_inv()
-//     displayTileInfo(selected_tile, tile_slot)
-//     const d = document.createElement('span')
-//     d.innerHTML = '-'
-//     d.addEventListener('click', e=>{
-//         inv.push(selected_tile);
-//         selected_tile = null;
-//         display_inv()
-//         tile_slot.innerHTML = '';
-//     })
-//     tile_slot.appendChild(d);
-// })
-
 function filter_cinv() {
     let y = {}
     cinv.forEach(e => {
@@ -134,10 +93,42 @@ function display_cinv() {
             ev.dataTransfer.setData("index", i);
             ev.dataTransfer.setData("type", e.type);
         })
+        s.addEventListener('click', ev=>{
+            switch (display_navbar.current) {
+                case 0:
+                    console.log(current_tile)
+                    if (current_tile) {
+                        for (let i = 0; i < current_tile.cards.length; i++) {
+                            const ch = current_tile.cards[i];
+                            if (ch.card==null) {
+                                ch.tryadd(e)
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    if (current_struc) {
+                        for (let i = 0; i < current_struc.cards.length; i++) {
+                            const ch = current_struc.cards[i];
+                            if (ch.card==null) {
+                                ch.tryadd(e)
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+            
+                    break;
+            
+                default:
+                    break;
+            }
+        })
         cinvHTML[i] = s;
         card_col.appendChild(s)
     }
-    console.log(card_col.innerHTML, "hey")
 }
 
 card_tree_m.addEventListener('dragover', e=>{

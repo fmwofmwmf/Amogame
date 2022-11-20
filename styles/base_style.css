@@ -82,10 +82,12 @@
    justify-content: center;
    border-style: solid;
    margin: 1px;
+   background-color: cornsilk;
 }
 
 .card-inv-e:hover {
-   border-color: rgb(150, 110, 96);
+   translate: 0px -10px;
+   transition-duration: 0.3s;
 }
 
 

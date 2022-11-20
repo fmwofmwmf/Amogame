@@ -4,13 +4,23 @@ const funs = {
             {
                 name:'Windmill',
                 level:1,
-                func:e=>{},
+                func:(c, s)=>{
+                    const out = gen_connect([0, 0, s.main.area.w, s.main.area.h],
+                        c, e=>{return s.up('b').map[e[0]][e[1]]==s.up('b').map[c[0]][c[1]] &&
+                            s.main.area.map[e[0]][e[1]].c!=0}).length
+                    return {'energy':out}
+                },
                 upcost:(c)=>{return {'energy':10*c.data.level}}
             }, 
             {
                 name:'Big Windmill',
                 level:1,
-                func:e=>{},
+                func:(c, s)=>{
+                    const out = gen_connect([0, 0, s.main.area.w, s.main.area.h],
+                        c, e=>{return s.up('b').map[e[0]][e[1]]==s.up('b').map[c[0]][c[1]] &&
+                            s.main.area.map[e[0]][e[1]].c!=0}).length*2
+                    return {'energy':out}
+                },
                 upcost:(c)=>{return {'energy':15*c.data.level}}
             }, 
         ],
@@ -19,20 +29,20 @@ const funs = {
         ],
 
     },
-    'modifier-t':{},
-    'modifier-s':{},
+    'mod-t':{},
+    'mod-s':{},
     'branch':{
         '2-fork':[
             ,{
                 name:'fork',
                 level:1,
-                function:e=>{},
+                func:e=>{},
                 init:(c)=>{return new CardHolder(c, grade_r = 0)}
             },
             {
                 name:'forkk',
                 level:1,
-                function:e=>{},
+                func:e=>{},
                 init:(c)=>{return new CardHolder(c, grade_r = 1)}
             },
         ]
@@ -83,7 +93,7 @@ class CardHolder {
      * @param {*} type_r accepted types
      * @param {*} grade_r max grade
      */
-    constructor(cont, type_r=null, grade_r=null, unlock=null) {
+    constructor(cont, type_r=[], grade_r=null, unlock=null) {
         this.container = cont;
         this.restrictions = {
             type:type_r,
@@ -92,6 +102,7 @@ class CardHolder {
         }
         this.card = null
         this.open = false
+        this.disp = null
         this.tryunlock()
     }
 
@@ -103,7 +114,10 @@ class CardHolder {
 
     typeCheck(t) {
         let ok = false;
-        console.log(this.restrictions)
+        if (this.restrictions.type.length == 0) {
+            console.log('f')
+            return true;
+        }
         this.restrictions.type.forEach(tp => {
             if (t == tp) {
                 ok = true
@@ -112,8 +126,23 @@ class CardHolder {
         return ok
     }
 
+    tryadd(e) {
+        if (!this.typeCheck(e.type)) {
+            return;
+        }
+        if (this.card!=null) {
+            cinv.push(this.card)
+        }
+        this.card = e
+        cinv.splice(cinv.find(c=>{return c==e}), 1)
+        display_cinv()
+        this.disp.classList = 'card tooltip '
+        this.disp.children[0].innerHTML = `${this.card.getInfo()}`
+    }
+
     display() {
         const civ = document.createElement('div')
+        this.disp = civ
         civ.classList = 'card tooltip '
         
         if (!this.open) {
@@ -129,25 +158,29 @@ class CardHolder {
                 info.innerHTML = `${this.card.getInfo()}`
             }
 
-            civ.addEventListener('dragover', e=>{
-                e.preventDefault()
-            })
-            
-            civ.addEventListener('drop', e=>{
-                const t = e.dataTransfer.getData("type")
-                if (!this.typeCheck(t)) {
-                    return;
-                }
-                const i = e.dataTransfer.getData("index")
-                if (this.card!=null) {
-                    cinv.push(this.card)
-                }
-                this.card = cinv[i]
-                cinv.splice(i, 1)
+            civ.addEventListener('click', e=>{
+                cinv.push(this.card)
+                this.card = null;
                 display_cinv()
-                civ.classList = 'card tooltip '
-                info.innerHTML = `${this.card.getInfo()}`
+                civ.classList += 'nocard '
+                info.innerHTML =  ''
             })
+
+            // civ.addEventListener('drop', e=>{
+            //     const t = e.dataTransfer.getData("type")
+            //     if (!this.typeCheck(t)) {
+            //         return;
+            //     }
+            //     const i = e.dataTransfer.getData("index")
+            //     if (this.card!=null) {
+            //         cinv.push(this.card)
+            //     }
+            //     this.card = cinv[i]
+            //     cinv.splice(i, 1)
+            //     display_cinv()
+            //     civ.classList = 'card tooltip '
+            //     info.innerHTML = `${this.card.getInfo()}`
+            // })
 
             civ.appendChild(info)
         }

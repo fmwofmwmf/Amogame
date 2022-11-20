@@ -8,7 +8,7 @@ class Tile {
         this.data[c[0]][c[1]].c = 2
         this.data[c[0]][c[1]].main = this
         this.contents = {count:[], struct:[]}
-        this.cards = [new CardHolder(this), new CardHolder(this), new CardHolder(this)]
+        this.cards = [new CardHolder(this, ['mod-t', 'branch']), new CardHolder(this, ['mod-t', 'branch']), new CardHolder(this, ['mod-t', 'branch'])]
 
         this.name = n[randint(0, n.length)]
         this.area = null;
@@ -70,6 +70,7 @@ class Tile {
     }
 
     rem(area, e) {
+        current_tile = null
         area.rem(this)
         inv.push(this)
         display_inv()
@@ -127,8 +128,11 @@ class Tile {
             'energy':0,
             'food':this.contents.count[1]
         }
-        this.contents.struct.forEach(e => {
-            eco.energy += e.getIncome()
+        this.contents.struct.forEach(s => {
+            const out = s.getIncome()
+            for (const k in out) {
+                eco[k] += out[k]
+            }
         });
         return eco
     }
@@ -264,7 +268,7 @@ class Struc {
         this.b = b;
         this.cpos = pos;
         this.income = 0;
-        this.cards = [new CardHolder(this, ['structure']), new CardHolder(this), new CardHolder(this)]
+        this.cards = [new CardHolder(this, ['structure']), new CardHolder(this, ['branch', 'mod-s']), new CardHolder(this, ['branch', 'mod-s'])]
         this.growth = randint(-2,3);
         this.name = snames[randint(0, n.length)];
         this.grade;
@@ -307,18 +311,18 @@ class Struc {
     }
 
     upgrade() {
-        console.log('a')
         this.grade++;
         this.e_grade += this.growth;
     }
 
     getIncome() {
-        const c = [this.cpos[0]+this.main.global[0]+this.main.center[0],
-        this.cpos[1]+this.main.global[1]+this.main.center[1]]        
-        const out = gen_connect([0, 0, this.main.area.w, this.main.area.h],
-            c, e=>{return this.up('b').map[e[0]][e[1]]==this.up('b').map[c[0]][c[1]] &&
-                this.main.area.map[e[0]][e[1]].c!=0})
-        return out.length
+        if (this.cards[0].card) {
+            const c = [this.cpos[0]+this.main.global[0]+this.main.center[0],
+            this.cpos[1]+this.main.global[1]+this.main.center[1]]
+
+            return this.cards[0].card.data.func(c, this)
+        }
+        return {}
     }
 
     getInfoCard(pos) {
@@ -334,14 +338,15 @@ class Struc {
 
         siv.innerHTML = `[${grades[this.grade]}${c}] ${this.name} ${this.growth>=0? '+'+this.growth:this.growth}`
 
-        const up = document.createElement('button')
+        const up = document.createElement('div')
+
         up.innerHTML = 'up'
         up.addEventListener('click', ()=>{
             this.upgrade();
-            add_struct_info(this, pos, this.up('m'))
+            add_struct_info(this, pos, this.up('m'));
         })
+
         siv.appendChild(up)
-        siv.innerHTML+='<br>'
 
         const m = document.createElement('div')
         m.appendChild(this.cards[0].display())
@@ -349,8 +354,7 @@ class Struc {
         siv.appendChild(m)
         for (let i = 1; i < this.cards.length; i++) {
             const c = this.cards[i];
-            siv.appendChild(c.display())
-            
+            siv.appendChild(c.display())   
         }
 
         return siv
