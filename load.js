@@ -33,6 +33,17 @@ const tnames = [
     'giv',
     'wiv'
 ]
+const snames = [
+    'rectangle city',
+    'circle city',
+    'triangle city',
+    'hexagon city',
+    'cube town',
+    'octahedron town',
+    'icosahedron town',
+    'town from one piece'
+
+]
 const borders = ['black', 'grey', 'yellow', 'gold', 'red'];
 const grades = ['F', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS'];
 

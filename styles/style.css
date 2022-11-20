@@ -188,6 +188,8 @@ body{
 
 /* TILES */
 
+
+
 #div3 {
     grid-template-columns: 1fr 1fr;
     display: grid;
@@ -202,6 +204,9 @@ body{
     border: solid;
 } */
 
+.struct-info-main {
+    border-style: groove;
+}
 
 #tile-view-m {
     grid-column: 2;

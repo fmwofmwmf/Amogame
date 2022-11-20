@@ -1,48 +1,48 @@
 
-var inv = []
+var inv = [];
 
 for (let i = 0; i < 1; i++) {
-    b = randint(5,100)
-    inv[i] = generate_tile(b, Math.ceil(Math.sqrt(b)/3))
+    b = randint(5,100);
+    inv[i] = generate_tile(b, Math.ceil(Math.sqrt(b)/3));
     
 }
-var invHTML = []
-var selected = -1
+var invHTML = [];
+var selected = -1;
 
 class Land extends Map {
     constructor(w, h, s, canv) {
         super(w, h, s, {c:0});
-        this.m = [-1,-1]
+        this.m = [-1,-1];
         this.c = document.getElementById(canv);
-        this.selected = [-1,-1]
-        this.ctx = this.c.getContext("2d", {willReadFrequently: true})
-        this.refresh()
-        this.events()   
-        this.tick = null
-        this.start_tick()
+        this.selected = [-1,-1];
+        this.ctx = this.c.getContext("2d", {willReadFrequently: true});
+        this.refresh();
+        this.events();
+        this.tick = null;
+        this.start_tick();
     }
 
     start_tick() {
         this.tick = setInterval(() => {
             this.tile_list.forEach(t => {
-                t.tile.time(1)
+                t.tile.time(1);
             });
         }, 500);
     }
 
     end_tick() {
-        clearInterval(this.tick)
-        this.tick = null
+        clearInterval(this.tick);
+        this.tick = null;
     }
 
     add(x1, y1, e) {
-        let bad = false
+        let bad = false;
         this.map = this.gen_empty();
-        this.tile_list.push({x:x1, y:y1, tile:e})
+        this.tile_list.push({x:x1, y:y1, tile:e});
 
         for (let i = 0; i < this.tile_list.length; i++) {
             const e = this.tile_list[i];
-            console.log(e, 'added')
+            console.log(e, 'added');
             if (!e.tile.plot(e.x, e.y, this.w, this.h, this.map)) {
                 bad = true
             } else {
@@ -162,7 +162,7 @@ class Land extends Map {
         } else if (this.selected[0] == -1) {
             add_struct_info(this.map[w][h], [w,h], this, true)
         }  else {
-            add_struct_info(this.map[this.selected[0]][this.selected[1]], this.selected, true)
+            add_struct_info(this.map[this.selected[0]][this.selected[1]], this.selected, this, true)
         }
     }
 
@@ -196,7 +196,7 @@ class Land extends Map {
                     this.selected = [-1, -1]
                 } else {
                     this.selected = [this.m[0], this.m[1]]
-                    add_struct_info(this.map[this.m[0]][this.m[1]], [this.m[0], this.m[1]])
+                    add_struct_info(this.map[this.m[0]][this.m[1]], [this.m[0], this.m[1]], this)
                     this.user_overlay(this.m[0], this.m[1])
                 }
                 
@@ -331,6 +331,7 @@ function add_struct_info(element, pos, area, draw=false) {
             StructInfo.innerHTML += biomenames[area.biome_map.map[pos[0]][pos[1]]]
             break;
         case 2:
+            display_navbar.switch_tab(0)
             if (draw) {
                 element.main.draw_border(pos[0], pos[1], area.size, area.ctx)
             }
@@ -339,15 +340,9 @@ function add_struct_info(element, pos, area, draw=false) {
             <br>${biomenames[area.biome_map.map[pos[0]][pos[1]]]}`
             break;
         case 3:
-            StructInfo.innerHTML += element.getInfoCard()
-            const up = document.createElement('button')
-            up.innerHTML = 'upgrade'
-            up.addEventListener('click', e=>{
-                element.upgrade();
-                add_struct_info(element, pos)
-            })
-            StructInfo.innerHTML += '<br>'
-            StructInfo.appendChild(up)
+            display_navbar.switch_tab(1)
+            StructInfo.innerHTML = `(${pos[0]+1}, ${pos[1]+1}) ${biomenames[area.biome_map.map[pos[0]][pos[1]]]}`
+            StructInfo.appendChild(element.getInfoCard(pos))
             break;
         default:
             StructInfo.innerHTML += 'Nothing'

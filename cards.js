@@ -101,6 +101,17 @@ class CardHolder {
         }
     }
 
+    typeCheck(t) {
+        let ok = false;
+        console.log(this.restrictions)
+        this.restrictions.type.forEach(tp => {
+            if (t == tp) {
+                ok = true
+            }
+        });
+        return ok
+    }
+
     display() {
         const civ = document.createElement('div')
         civ.classList = 'card tooltip '
@@ -124,7 +135,9 @@ class CardHolder {
             
             civ.addEventListener('drop', e=>{
                 const t = e.dataTransfer.getData("type")
-                console.log(t)
+                if (!this.typeCheck(t)) {
+                    return;
+                }
                 const i = e.dataTransfer.getData("index")
                 if (this.card!=null) {
                     cinv.push(this.card)

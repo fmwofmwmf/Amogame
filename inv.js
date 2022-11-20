@@ -7,7 +7,7 @@ const card_tree_m = document.getElementById('card-tree-main')
 var collHTML = []
 
 var selected_card = null
-var cinv = [new Card('structure', 'power', 0), new Card('structure', 'power', 0), new Card('structure', 'power', 1)]
+var cinv = [new Card('structure', 'power', 0), new Card('branch', '2-fork', 1), new Card('structure', 'power', 0), new Card('structure', 'power', 1)]
 var cinvHTML = []
 var selected_tile = null
 var c_tree_selected = -1

@@ -55,11 +55,9 @@ const canvas_navbar = new NavBar("canvas-navbar", "canvas-content")
 const display_navbar = new NavBar("display-navbar", "display-content")
 const area_navbar = new NavBar("canvas-navbar", "canvas-content")
 
-
-nextday.addEventListener('click', (e) => {
-    const land_eco = land_grid.get_income()
-    for (const k in land_eco) {
-        eco[k] += land_eco[k]
+function addeco(ob) {
+    for (const k in ob) {
+        eco[k] += ob[k]
     }
     updateRes();
-})
+}

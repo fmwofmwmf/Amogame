@@ -16,10 +16,11 @@ class Tile {
         this.fixH()
         this.fixW()
         
-        this.bindStruct()
-        this.updateContents()
+        
+        this.updateContents();
 
         this.calcGrade();
+        this.bindStruct();
         this.global = null;
 
         this.progresses = []
@@ -83,7 +84,7 @@ class Tile {
             for (let j = 0; j < this.h; j++) {
                 const e = this.data[i][j];
                 if (e.c==3) {
-                    e.main = this;
+                    e.bindMain(this)
                 } 
             }
         }
@@ -258,16 +259,23 @@ class Struc {
      * @param {string} e type
      * @param {number} b biome
      */
-    constructor(e, pos) {
+    constructor(e, pos, n = snames) {
         this.c = 3;
         this.b = b;
-        this.cpos = pos
+        this.cpos = pos;
         this.income = 0;
-        this.cards = [new CardHolder(this), new CardHolder(this), new CardHolder(this)]
-        this.level = 1
-        this.grade = randint(0,grades.length)
+        this.cards = [new CardHolder(this, ['structure']), new CardHolder(this), new CardHolder(this)]
+        this.growth = randint(-2,3);
+        this.name = snames[randint(0, n.length)];
+        this.grade;
+        this.e_grade = 0;
         this.main = null;
-        this.type = e
+        this.type = e;
+    }
+
+    bindMain(tile) {
+        this.main = tile;
+        this.grade = this.main.tier;
     }
 
     getUpgrade() {
@@ -282,7 +290,7 @@ class Struc {
     /**
      * 
      * @param {string} str t for tile, m for area, b for biome
-     * @returns 
+     * @returns
      */
     up(str) {
         switch (str) {
@@ -299,14 +307,9 @@ class Struc {
     }
 
     upgrade() {
-        if (this.grade==grades.length-1 && this.level==100)
-            return
-        if (this.level==100) {
-            this.level = 0
-            this.grade++;
-        } else {
-            this.level++;
-        }
+        console.log('a')
+        this.grade++;
+        this.e_grade += this.growth;
     }
 
     getIncome() {
@@ -318,14 +321,39 @@ class Struc {
         return out.length
     }
 
-    getInfoCard() {
-        const coord = [this.cpos[0]+
-        this.main.global[0]+
-        this.main.center[0],
-        this.cpos[1]+this.main.global[1]+this.main.center[1]]
+    getInfoCard(pos) {
+        const siv = document.createElement('div')
+        siv.style.textAlign = 'center'
 
-        return `[${grades[this.grade]}] Lv.${this.level} ${this.type}
-        <br> ${biomenames[this.up('b').map[coord[0]][coord[1]]]}`
+        let c = ''
+        if (this.e_grade>0) {
+            c = '+'+this.e_grade
+        } else if (this.e_grade<0) {
+            c = this.e_grade
+        }
+
+        siv.innerHTML = `[${grades[this.grade]}${c}] ${this.name} ${this.growth>=0? '+'+this.growth:this.growth}`
+
+        const up = document.createElement('button')
+        up.innerHTML = 'up'
+        up.addEventListener('click', ()=>{
+            this.upgrade();
+            add_struct_info(this, pos, this.up('m'))
+        })
+        siv.appendChild(up)
+        siv.innerHTML+='<br>'
+
+        const m = document.createElement('div')
+        m.appendChild(this.cards[0].display())
+        m.className = 'struct-info-main'
+        siv.appendChild(m)
+        for (let i = 1; i < this.cards.length; i++) {
+            const c = this.cards[i];
+            siv.appendChild(c.display())
+            
+        }
+
+        return siv
     }
 }
 
