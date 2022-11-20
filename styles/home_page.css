@@ -41,8 +41,6 @@
    width: 100%;
    height: 100%;
    border: solid;
-   position: relative;
-   overflow-y: scroll;
 }
 
 
@@ -86,13 +84,11 @@
 
 /* elements inv */
 #inv-content{
-   
+   height: 262px;
+   overflow-y: scroll;
 }
 
 #inv-navbar {
-   background-color: #fff;
-   position: sticky;
-   top: 0;
 }
 
 
