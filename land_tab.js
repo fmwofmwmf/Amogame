@@ -386,7 +386,7 @@ class Game extends Land {
     }
 }
 
-const restrict = [600, 400]
+const restrict = [450, 300]
 const siz = [[15, 10], [30, 20], [70, 20]]
 
 for (let i = 0; i < 3; i++) {
