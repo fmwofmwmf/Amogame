@@ -36,11 +36,10 @@ class Biomes extends Map {
                 }
                 this.ctx.fillRect(x, y, this.size, this.size);
                 this.ctx.closePath();
-                
             }
         }
         this.image = this.ctx.getImageData(0, 0, this.c.width, this.c.height)
     }
 }
 
-const biome_grid = new Biomes(30, 20, 15, document.getElementById('biome-canvas'))
+const biome_grid = new Biomes(30, 20, 15, document.getElementById('biome-canvas-w1'))

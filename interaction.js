@@ -33,16 +33,20 @@ class NavBar {
                 elem.style.display = "none"
             }
         }
+        this.switch_tab(0)
     }
 
     switch_tab(index){
         for (let i = 0; i < this.tabs.length; i++) {
             const tab = this.tabs[i];
+            const nav = this.navs[i];
             if (i == index) {
                 tab.style.display = this.specif[index]
+                nav.style.backgroundColor = '#eee';
             }
             else {
                 tab.style.display = "none"
+                nav.style.backgroundColor = 'white';
             }
         }
     }
@@ -53,6 +57,9 @@ let inv_navbar = new NavBar("inv-navbar", "inv-content")
 let canvas_navbar = new NavBar("canvas-navbar", "canvas-content")
 let display_navbar = new NavBar("display-navbar", "display-content")
 
+const area_navbar = new NavBar(["canvas-nav-w1", "canvas-nav-w2", "canvas-nav-w3"],
+                            ["w1", "w2", "w3"],
+                            ["grid", "grid", "grid"])
 
 
 nextday.addEventListener('click', (e) => {

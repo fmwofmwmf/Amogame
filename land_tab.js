@@ -10,14 +10,29 @@ var invHTML = []
 var selected = -1
 
 class Land extends Map {
-    constructor(w,h,s,canv) {
+    constructor(w, h, s, canv) {
         super(w, h, s, {c:0});
         this.m = [-1,-1]
-        this.c = canv;
+        this.c = document.getElementById(canv);
         this.selected = [-1,-1]
         this.ctx = this.c.getContext("2d", {willReadFrequently: true})
         this.refresh()
         this.events()   
+        this.tick = null
+        this.start_tick()
+    }
+
+    start_tick() {
+        this.tick = setInterval(() => {
+            this.tile_list.forEach(t => {
+                t.tile.time(1)
+            });
+        }, 500);
+    }
+
+    end_tick() {
+        clearInterval(this.tick)
+        this.tick = null
     }
 
     add(x1, y1, e) {
@@ -27,15 +42,16 @@ class Land extends Map {
 
         for (let i = 0; i < this.tile_list.length; i++) {
             const e = this.tile_list[i];
-            console.log(e)
+            console.log(e, 'added')
             if (!e.tile.plot(e.x, e.y, this.w, this.h, this.map)) {
                 bad = true
+            } else {
+                e.tile.area = this;
             }
         }
         if (bad) {
             this.tile_list.pop()
         }
-        console.log(this)
         if (!bad) {
             this.refresh()
         }
@@ -44,15 +60,13 @@ class Land extends Map {
 
     rem(e) {
         const a = this.tile_list.findIndex(el=>{return el.tile==e})
-        this.tile_list.splice(a,1)
-        console.log(this.tile_list, 'tiles')
-        
+        this.tile_list.splice(a,1)        
         this.refresh()
     }
 
     get_income() {
         let out = {}
-        land_grid.tile_list.forEach(t => {
+        this.tile_list.forEach(t => {
             const g = t.tile.getIncome()
             for (const k in g) {
                 out[k] = out[k] + g[k] || g[k]
@@ -146,7 +160,7 @@ class Land extends Map {
         if (inv[selected] && selected>=0) {
             inv[selected].draw_preview(w, h, this.size, this.ctx);
         } else if (this.selected[0] == -1) {
-            add_struct_info(this.map[w][h], [w,h], true)
+            add_struct_info(this.map[w][h], [w,h], this, true)
         }  else {
             add_struct_info(this.map[this.selected[0]][this.selected[1]], this.selected, true)
         }
@@ -191,7 +205,7 @@ class Land extends Map {
 
         this.c.addEventListener('dblclick', e=>{
             if (this.map[this.m[0]][this.m[1]].c == 2) {
-                this.map[this.m[0]][this.m[1]].main.rem(Tileinfo)
+                this.map[this.m[0]][this.m[1]].main.rem(TileInfo)
             }
         })
     }
@@ -201,7 +215,7 @@ class Land extends Map {
  * 
  * @param {Tile} shape Tile to display info of
  */
-function displayTileInfo(shape, node, rem=false) {
+function displayTileInfo(shape, node, area, rem=false) {
     node.innerHTML = ''
     const info = shape.getName()
 
@@ -259,6 +273,12 @@ function displayTileInfo(shape, node, rem=false) {
         cards.appendChild(c.display())
     });
 
+    const progress = document.createElement('progress')
+    progress.id = 'tile-info-progress'
+    shape.progresses.push(progress)
+    progress.value = 0
+    progress.max = shape.maxticks
+
     node.appendChild(body)
     node.appendChild(change)
     node.appendChild(name)
@@ -266,16 +286,17 @@ function displayTileInfo(shape, node, rem=false) {
     node.appendChild(tier)
     node.appendChild(other)
     node.appendChild(cards)
+    node.appendChild(progress)
 
     node.style.borderColor = colors[shape.biome];
     //if center add remove button
-    if (rem) {
-        if (land_grid.tile_list.find(e=>{return e.tile==shape})) {
+    if (rem && area) {
+        if (area.tile_list.find(e=>{return e.tile==shape})) {
             let r = document.createElement('button')
             r.innerHTML = '<center>✕</center>'
             r.classList = 'tile-info-remove'
             r.addEventListener('click', e=>{
-                shape.rem(node)
+                shape.rem(area, node)
             })
             node.appendChild(r)
         }
@@ -303,19 +324,19 @@ function cycle_button() {
  * @param {Struc}   element Struc to display
  * @param {boolean} draw    draw highlight of the shape
  */
-function add_struct_info(element, pos, draw=false) {
+function add_struct_info(element, pos, area, draw=false) {
     StructInfo.innerHTML = `(${pos[0]+1}, ${pos[1]+1})<br>`
     switch (element.c) {
         case 1:
-            StructInfo.innerHTML += biomenames[biome_grid.map[pos[0]][pos[1]]]
+            StructInfo.innerHTML += biomenames[area.biome_map.map[pos[0]][pos[1]]]
             break;
         case 2:
             if (draw) {
-                element.main.draw_border(pos[0], pos[1], land_grid.size, land_grid.ctx)
+                element.main.draw_border(pos[0], pos[1], area.size, area.ctx)
             }
-            displayTileInfo(element.main, TileInfo, true);
+            displayTileInfo(element.main, TileInfo, area, true);
             StructInfo.innerHTML += `Center
-            <br>${biomenames[biome_grid.map[pos[0]][pos[1]]]}`
+            <br>${biomenames[area.biome_map.map[pos[0]][pos[1]]]}`
             break;
         case 3:
             StructInfo.innerHTML += element.getInfoCard()
@@ -334,4 +355,49 @@ function add_struct_info(element, pos, draw=false) {
     }
 }
 
-const land_grid = new Land(30, 20, 15, document.getElementById('land-canvas'))
+class Area extends Land {
+    constructor(w, h, s, canvas_land, canvas_biome, container) {
+        super(w, h, s, canvas_land);
+        this.container = document.getElementById(container);
+        this.biome_map = new Biomes(w, h, s, document.getElementById(canvas_biome))
+        this.nobiome()
+    }
+
+    nobiome() {
+        this.toggle_biome = document.createElement('div')
+        this.toggle_biome.className = "button toggle-biome"
+        this.toggle_biome.innerHTML = '-B'
+        this.toggle_biome.addEventListener('click', ()=>{
+            if (this.biome_map.c.style.display == 'none') {
+                this.biome_map.c.style.display = 'block'
+                this.toggle_biome.innerHTML = '-B'
+            } else {
+                this.biome_map.c.style.display = 'none'
+                this.toggle_biome.innerHTML = '+B'
+            }
+        })
+        this.container.appendChild(this.toggle_biome)
+    }
+}
+
+class Game extends Land {
+    constructor(w,h,s,canv) {
+        super(w, h, s, canv);
+    }
+}
+
+const restrict = [600, 400]
+const siz = [[15, 10], [30, 20], [70, 20]]
+
+for (let i = 0; i < 3; i++) {
+    const s = Math.min(restrict[0]/siz[i][0], restrict[1]/siz[i][1])
+    new Area(siz[i][0], siz[i][1], s, `land-canvas-w${i+1}`, `biome-canvas-w${i+1}`, `w${i+1}`)
+}
+
+// const land_grid_w1 = new Area(30, 20, 15, 'land-canvas-w1', 'biome-canvas-w1')
+// const land_grid_w2 = new Area(50, 50, 15, 'land-canvas-w2', 'biome-canvas-w2')
+// const land_grid_w3 = new Area(30, 20, 15, 'land-canvas-w3', 'biome-canvas-w3')
+
+
+
+const game = new Game(20, 20, 15, 'game-1-canvas')
