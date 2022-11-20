@@ -25,6 +25,8 @@
    grid-column: 2/3;
    grid-row: 1;
    margin:1px;
+   display: grid;
+   justify-content: center;
 }
 
 
@@ -50,8 +52,7 @@
 
 /* elements - canvas */
 #tile-view {
-   display: grid;
-   justify-content: center;
+   
 }
 
 .areas {

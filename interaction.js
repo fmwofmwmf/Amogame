@@ -27,11 +27,8 @@ class NavBar {
         }
         for (let i = 0; i < this.tabs.length; i++) {
             const elem = this.tabs[i];
-            let setstyle = elem.style.display
-            this.specif.push(setstyle)
-            if (i != 0){
-                elem.style.display = "none"
-            }
+            const setstyle = elem.style.display
+            this.specif.push((elem.style.display != "none") ? setstyle : '')
         }
         this.switch_tab(0)
     }
@@ -52,14 +49,11 @@ class NavBar {
     }
 }
 
-let main_navbar = new NavBar("navbar", "main")
-let inv_navbar = new NavBar("inv-navbar", "inv-content")
-let canvas_navbar = new NavBar("canvas-navbar", "canvas-content")
-let display_navbar = new NavBar("display-navbar", "display-content")
-
-const area_navbar = new NavBar(["canvas-nav-w1", "canvas-nav-w2", "canvas-nav-w3"],
-                            ["w1", "w2", "w3"],
-                            ["grid", "grid", "grid"])
+const main_navbar = new NavBar("navbar", "main")
+const inv_navbar = new NavBar("inv-navbar", "inv-content")
+const canvas_navbar = new NavBar("canvas-navbar", "canvas-content")
+const display_navbar = new NavBar("display-navbar", "display-content")
+const area_navbar = new NavBar("canvas-navbar", "canvas-content")
 
 
 nextday.addEventListener('click', (e) => {
