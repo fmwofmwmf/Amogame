@@ -57,9 +57,3 @@ const canvas_navbar = new NavBar("canvas-navbar", "canvas-content")
 const display_navbar = new NavBar("display-navbar", "display-content")
 const area_navbar = new NavBar("canvas-navbar", "canvas-content")
 
-function addeco(ob) {
-    for (const k in ob) {
-        eco[k] += ob[k]
-    }
-    updateRes();
-}

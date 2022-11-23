@@ -1,5 +1,3 @@
-
-
 class Biomes extends Map {
     constructor(w, h, s, canv) {
         super(w, h, s, 0);

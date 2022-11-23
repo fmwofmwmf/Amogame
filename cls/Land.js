@@ -4,7 +4,6 @@ var inv = [];
 for (let i = 0; i < 1; i++) {
     b = randint(5,100);
     inv[i] = generate_tile(b, Math.ceil(Math.sqrt(b)/3));
-    
 }
 var invHTML = [];
 var selected = -1;
@@ -35,10 +34,10 @@ class Land extends Map {
         this.tick = null;
     }
 
-    add(x1, y1, e) {
+    add_tile(x, y, tile) {
         let bad = false;
         this.map = this.gen_empty();
-        this.tile_list.push({x:x1, y:y1, tile:e});
+        this.tile_list.push({x:x, y:y, tile:tile});
 
         for (let i = 0; i < this.tile_list.length; i++) {
             const e = this.tile_list[i];
@@ -184,7 +183,7 @@ class Land extends Map {
             if (inv[selected]) {
                 if (selected>=0) {
                     const a = inv.findIndex(e=>{return e==inv[selected]})
-                    if (!this.add(this.m[0], this.m[1], inv[a])) {
+                    if (!this.add_tile(this.m[0], this.m[1], inv[a])) {
                         inv.splice(a, 1)
                         selected = -1
                         display_inv()
@@ -357,60 +356,5 @@ function add_struct_info(element, pos, area, draw=false) {
     }
 }
 
-class Area extends Land {
-    constructor(w, h, s, canvas_land, canvas_biome, container) {
-        super(w, h, s, canvas_land);
-        this.container = document.getElementById(container);
-        this.biome_map = new Biomes(w, h, s, document.getElementById(canvas_biome))
-        this.nobiome()
-    }
-
-    resize(w, h) {
-        this.container.width = w
-        this.container.height = h
-        this.size = Math.min(w/this.w, h/this.h)
-        this.refresh()
-        this.biome_map.size = this.size
-        this.biome_map.refresh()
-    }
-
-    nobiome() {
-        this.toggle_biome = document.createElement('div')
-        this.toggle_biome.className = "button toggle-biome"
-        this.toggle_biome.innerHTML = '-B'
-        this.toggle_biome.addEventListener('click', ()=>{
-            if (this.biome_map.c.style.display == 'none') {
-                this.biome_map.c.style.display = 'block'
-                this.toggle_biome.innerHTML = '-B'
-            } else {
-                this.biome_map.c.style.display = 'none'
-                this.toggle_biome.innerHTML = '+B'
-            }
-        })
-        this.container.appendChild(this.toggle_biome)
-    }
-}
-
-class Game extends Land {
-    constructor(w,h,s,canv) {
-        super(w, h, s, canv);
-    }
-}
-
-const restrict = [450, 300]
-const siz = [[15, 10], [30, 20], [70, 20]]
-
-for (let i = 0; i < 3; i++) {
-    const s = Math.min(restrict[0]/siz[i][0], restrict[1]/siz[i][1])
-    let y = new Area(siz[i][0], siz[i][1], s, `land-canvas-w${i+1}`, `biome-canvas-w${i+1}`, `w${i+1}`)
-}
 
 
-
-// const land_grid_w1 = new Area(30, 20, 15, 'land-canvas-w1', 'biome-canvas-w1')
-// const land_grid_w2 = new Area(50, 50, 15, 'land-canvas-w2', 'biome-canvas-w2')
-// const land_grid_w3 = new Area(30, 20, 15, 'land-canvas-w3', 'biome-canvas-w3')
-
-
-
-const game = new Game(20, 20, 15, 'game-1-canvas')

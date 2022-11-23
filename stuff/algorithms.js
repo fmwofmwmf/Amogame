@@ -203,3 +203,41 @@ function fit(inp, eq, clean) {
     }
     return out
 }
+
+function getborders(arr, match) {
+    let borders = []
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr[i].length; j++) {
+            if (match(arr[i][j])){
+            const Eborders = [[[i,j],[i+1,j]], [[i+1,j],[i+1,j+1]],[[i,j],[i,j+1]],[[i,j+1],[i+1,j+1]]]
+                if (j-1>=0){
+                if (arr[i][j-1].c != 0) {
+                    Eborders[0] = null
+                }
+                }
+                if (i+1<arr.length) {
+                if (arr[i+1][j].c != 0) {
+                    Eborders[1] = null
+                }
+                }
+                if (i-1>=0) {
+                if (arr[i-1][j].c != 0){
+                    Eborders[2] = null
+                }
+                }
+                if (j+1<arr[i].length) {
+                if (arr[i][j+1].c != 0) {
+                    Eborders[3] = null
+                }
+                }
+    
+                Eborders.forEach(e => {
+                if (e!=null) {
+                    borders.push(e)
+                }
+                });
+            }
+        }
+    }
+    return borders
+}
