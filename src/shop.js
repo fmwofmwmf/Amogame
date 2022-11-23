@@ -7,7 +7,32 @@ const boxes_button = document.getElementById('shop-page')
 const store = document.getElementById('shop-page')
 const boxes = document.getElementById('shop-page')
 
-var lootboxes = {
+const store_items = [
+    {
+        'desc1':'buy a D crate',
+        'price':'-2 foods',
+        'gives':'+1 [D] crate',
+        check:()=>eco.enough({'food':2}),
+        sub:()=>eco.sub={'food':2},
+        add:()=>{
+            lootboxes['D'].count++;
+            refresh_boxes();
+        },
+    },
+    {
+        'desc1':'buy a C crate',
+        'price':'-5 foods',
+        'gives':'+1 [C] crate',
+        check:()=>eco.enough({'food':5}),
+        sub:()=>eco.sub={'food':5},
+        add:()=>{
+            lootboxes['C'].count++;
+            refresh_boxes();
+        },
+    }
+]
+
+const lootboxes = {
     'T':{
         count:Infinity,
         unbox:(c)=>{
@@ -70,35 +95,6 @@ var lootboxes = {
     },
 }
 
-const store_items = [
-    {
-        'desc1':'buy a D crate',
-        'price':'-2 foods',
-        'gives':'+1 [D] crate',
-        check:()=>{return eco.food>=2},
-        sub:()=>{eco.food-=2;
-        updateRes()
-        },
-        add:()=>{
-            lootboxes['D'].count++;
-            refresh_boxes();
-        },
-    },
-    {
-        'desc1':'buy a C crate',
-        'price':'-5 foods',
-        'gives':'+1 [C] crate',
-        check:()=>{return eco.food>=5},
-        sub:()=>{eco.food-=5;
-        updateRes()
-        },
-        add:()=>{
-            lootboxes['C'].count++;
-            refresh_boxes();
-        },
-    }
-]
-
 function shop(check, subtract, add) {
     console.log(check())
     if (check()) {
@@ -144,8 +140,6 @@ function refresh_boxes() {
                 const loot = l.unbox(1)
                 add_loot(loot)
                 lootinfo.innerHTML = loot_recap(loot)
-                display_inv()
-                display_cinv()
             })
         }
         loot_count.appendChild(loot)
@@ -192,10 +186,10 @@ function loot_recap(loot) {
 
 function add_loot(crate) {
     crate.tiles.forEach(e => {
-        inv.push(e)
+        inv.add_tile = e
     });
     crate.cards.forEach(e => {
-        cinv.push(e)
+        inv.add_card = e
     });
 }
 

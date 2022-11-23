@@ -4,13 +4,40 @@ const tile_col = document.getElementById('tile-inv')
 const tile_slot = document.getElementById('tile-view-main')
 const card_tree_m = document.getElementById('card-tree-main')
 
-var collHTML = []
+const inv = {
+    tiles:[],
+    tileHTML:[],
+    cards:[],
+    cardHTML:[],
+    s_tile:null,
+    set add_tile(tile) {
+        this.tiles.push(tile)
+        display_inv()
+    },
+    set rem_tile(tile) {
+        inv.tiles.splice(inv.tiles.find(t=>{return t==tile}), 1)
+        display_inv()
+    },
+    set add_card(card) {
+        this.cards.push(card)
+        display_cinv()
+    },
+    set rem_card(card) {
+        inv.cards.splice(inv.cards.find(c=>{return c==card}), 1)
+        display_cinv()
+    }
+}
+
+
+for (let i = 0; i < 1; i++) {
+    b = randint(5,100);
+    inv.add_tile = generate_tile(b, Math.ceil(Math.sqrt(b)/3));
+}
 
 var selected_card = null
-var cinv = [new Card('structure', 'power', 0), new Card('branch', '2-fork', 1), new Card('structure', 'power', 0), new Card('structure', 'power', 1)]
-var cinvHTML = []
 var selected_tile = null
-var c_tree_selected = -1
+inv.cards = [new Card('structure', 'power', 0), new Card('branch', '2-fork', 1), new Card('structure', 'power', 0), new Card('structure', 'power', 1)]
+
 
 /**
  * Moves obj between array
@@ -32,15 +59,15 @@ function move(from, to, match, package) {
  * @param {number} j index of element to select
  */
 function select(j) {
-    if (selected==j) {
-        invHTML[j].className = "hotbar-e"
-        selected = -1
+    if (inv.s_tile==j) {
+        inv.tileHTML[j].className = "hotbar-e"
+        inv.s_tile = -1
     } else {
-        if (inv[selected] && selected != -1)
-            invHTML[selected].className = "hotbar-e"
-        invHTML[j].className = "hotbar-e hotbar-e-selected"
-        selected = j
-        displayTileInfo(inv[j], TileInfo, null, true)
+        if (inv.tiles[inv.s_tile] && inv.s_tile != -1)
+            inv.tileHTML[inv.s_tile].className = "hotbar-e"
+        inv.tileHTML[j].className = "hotbar-e hotbar-e-selected"
+        inv.s_tile = j
+        displayTileInfo(inv.tiles[j], TileInfo, null, true)
     }
 }
 
@@ -49,9 +76,9 @@ function select(j) {
  */
 function display_inv() {
     hbar.innerHTML = ''
-    invHTML = [];
-    for (let i = 0; i < inv.length; i++) {
-        const e = inv[i];
+    inv.tileHTML = [];
+    for (let i = 0; i < inv.tiles.length; i++) {
+        const e = inv.tiles[i];
         const s = document.createElement('div');
         Object.assign(s, {className: 'hotbar-e' });
         s.innerHTML=`${tiers[e.tier]}`
@@ -59,16 +86,15 @@ function display_inv() {
             select(i)
             //grid['image'] = render_grid(grid.size, grid.map, ctx)
         })
-        invHTML[i] = s;
+        inv.tileHTML[i] = s;
         hbar.appendChild(s)
     }
-    // display_collection()
 }
 display_inv()
 
 function filter_cinv() {
     let y = {}
-    cinv.forEach(e => {
+    inv.cards.forEach(e => {
         if (y[e.type] != undefined) {
             y[e.type].push(e)
         } else {
@@ -81,9 +107,9 @@ function filter_cinv() {
 
 function display_cinv() {
     card_col.innerHTML = ''
-    cinvHTML = [];
-    for (let i = 0; i < cinv.length; i++) {
-        const e = cinv[i];
+    inv.cardHTML = [];
+    for (let i = 0; i < inv.cards.length; i++) {
+        const e = inv.cards[i];
         const s = document.createElement('div');
         
         s.innerHTML = e.getInfo()
@@ -126,7 +152,7 @@ function display_cinv() {
                     break;
             }
         })
-        cinvHTML[i] = s;
+        inv.cardHTML[i] = s;
         card_col.appendChild(s)
     }
 }
@@ -138,11 +164,10 @@ card_tree_m.addEventListener('dragover', e=>{
 card_tree_m.addEventListener('drop', e=>{
     const i = e.dataTransfer.getData("index")
     if (selected_card!=null) {
-        cinv.push(selected_card)
+        inv.add_card = selected_card
     }
-    selected_card = cinv[i]
-    cinv.splice(i, 1)
-    display_cinv()
+    selected_card = inv.cards[i]
+    inv.rem_card = inv.cards[i]
     display_card()
 })
 
@@ -164,10 +189,9 @@ function display_card() {
     down.className = 'button'
     down.innerHTML = '-'
     down.addEventListener('click', e=>{
-        cinv.push(selected_card)
+        inv.add_card = selected_card
         selected_card = null
         card_tree_m.innerHTML = '';
-        display_cinv()
     })
     s.appendChild(up)
     s.appendChild(down)

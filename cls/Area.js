@@ -2,7 +2,7 @@ class Area extends Land {
     constructor(w, h, s, canvas_land, canvas_biome, container) {
         super(w, h, s, canvas_land);
         this.container = document.getElementById(container);
-        this.biome_map = new Biomes(w, h, s, document.getElementById(canvas_biome))
+        this.biome_map = new Biomes(w, h, s, canvas_biome)
         this.nobiome()
     }
 

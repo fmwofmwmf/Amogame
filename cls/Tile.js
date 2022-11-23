@@ -32,7 +32,7 @@ class Tile {
         this.ticks+=t;
         if (this.ticks>=this.maxticks) {
             this.ticks = 0
-            addeco(this.getIncome())
+            eco.add = this.getIncome()
         }
         this.progresses.forEach(p => {
             p.value = this.ticks
@@ -69,15 +69,15 @@ class Tile {
         return true;
     }
 
-    rem(area, e) {
+    set remove(display) {
         current_tile = null
-        area.rem(this)
-        inv.push(this)
-        display_inv()
+        console.log('i')
+        this.area.remove_tile = this
+        inv.add_tile = this
+        this.area.refresh()
         this.area=null;
-        area.refresh()
-        e.innerHTML = 'Nothing'
-        e.style.borderColor = 'red'
+        display.innerHTML = 'Nothing'
+        display.style.borderColor = 'red'
     }
 
     bindStruct() {
@@ -250,10 +250,6 @@ class Tile {
             ctx.lineTo((e[1][0]*this.w+x-this.center[0])*s, (e[1][1]*this.h+y-this.center[1])*s);
             ctx.stroke();
         })
-    }
-
-    remove() {
-        this.plot = null
     }
 }
 

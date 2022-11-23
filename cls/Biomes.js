@@ -1,11 +1,10 @@
 class Biomes extends Map {
-    constructor(w, h, s, canv) {
-        super(w, h, s, 0);
+    constructor(w, h, s, canvas) {
+        super(w, h, s, 0, canvas);
         this.m = [-1,-1]
-        this.c = canv;
         this.selected = [-1,-1]
         this.map = biome(this.w, this.h, [1, 2, 3, 4], [30,30,30,30])
-        this.ctx = this.c.getContext("2d", {willReadFrequently: true})
+        
         this.refresh()
     }
 
@@ -40,4 +39,4 @@ class Biomes extends Map {
     }
 }
 
-const biome_grid = new Biomes(30, 20, 15, document.getElementById('biome-canvas-w1'))
+//const biome_grid = new Biomes(30, 20, 15, document.getElementById('biome-canvas-w1'))

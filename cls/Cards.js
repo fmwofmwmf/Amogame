@@ -12,23 +12,14 @@ class Card {
     }
 
     upgrade() {
-        let y = true
         console.log(this.data)
         const cost = this.data.upcost(this)
-        for (const k in cost) {
-            if (eco[k]<cost[k]) {
-                y = false
-            }
-        }
-        if (y) {
+        if (eco.enough(cost)) {
             this.data.level ++;
-            for (const k in cost) {
-                (eco[k]-=cost[k])
-            }
-            updateRes();
+            eco.sub = cost
+            return true
         }
-        console.log(y)
-        return y
+        return false
     }
 
     getInfo() {
@@ -80,11 +71,10 @@ class CardHolder {
             return;
         }
         if (this.card!=null) {
-            cinv.push(this.card)
+            inv.add_card = this.card
         }
         this.card = e
-        cinv.splice(cinv.find(c=>{return c==e}), 1)
-        display_cinv()
+        inv.rem_card = this.card
         this.disp.classList = 'card tooltip '
         this.disp.children[0].innerHTML = `${this.card.getInfo()}`
     }
@@ -108,9 +98,8 @@ class CardHolder {
             }
 
             civ.addEventListener('click', e=>{
-                cinv.push(this.card)
+                inv.add_card = this.card
                 this.card = null;
-                display_cinv()
                 civ.classList += 'nocard '
                 info.innerHTML =  ''
             })

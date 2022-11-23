@@ -1,23 +1,16 @@
 
-var inv = [];
-
-for (let i = 0; i < 1; i++) {
-    b = randint(5,100);
-    inv[i] = generate_tile(b, Math.ceil(Math.sqrt(b)/3));
-}
-var invHTML = [];
-var selected = -1;
 
 class Land extends Map {
-    constructor(w, h, s, canv) {
-        super(w, h, s, {c:0});
-        this.m = [-1,-1];
-        this.c = document.getElementById(canv);
-        this.selected = [-1,-1];
-        this.ctx = this.c.getContext("2d", {willReadFrequently: true});
+
+    m = [-1,-1];
+    selected = [-1,-1];
+    tile_list = [];
+    tick = null;
+
+    constructor(w, h, s, canvas) {
+        super(w, h, s, {c:0}, canvas);
         this.refresh();
         this.events();
-        this.tick = null;
         this.start_tick();
     }
 
@@ -57,10 +50,11 @@ class Land extends Map {
         return bad
     }
 
-    rem(e) {
-        const a = this.tile_list.findIndex(el=>{return el.tile==e})
+    set remove_tile(tile) {
+        const a = this.tile_list.findIndex(el=>{return el.tile==tile})
         this.tile_list.splice(a,1)        
         this.refresh()
+        this.selected = [-1,-1];
     }
 
     get_income() {
@@ -156,8 +150,8 @@ class Land extends Map {
         this.m[0] = w;
         this.m[1] = h;
         
-        if (inv[selected] && selected>=0) {
-            inv[selected].draw_preview(w, h, this.size, this.ctx);
+        if (inv.tiles[inv.s_tile] && inv.s_tile>=0) {
+            inv.tiles[inv.s_tile].draw_preview(w, h, this.size, this.ctx);
         } else if (this.selected[0] == -1) {
             add_struct_info(this.map[w][h], [w,h], this, true)
         }  else {
@@ -180,13 +174,12 @@ class Land extends Map {
         })
 
         this.c.addEventListener('click', e => {
-            if (inv[selected]) {
-                if (selected>=0) {
-                    const a = inv.findIndex(e=>{return e==inv[selected]})
-                    if (!this.add_tile(this.m[0], this.m[1], inv[a])) {
-                        inv.splice(a, 1)
-                        selected = -1
-                        display_inv()
+            if (inv.tiles[inv.s_tile]) {
+                if (inv.s_tile>=0) {
+                    const a = inv.tiles.findIndex(e=>{return e==inv.tiles[inv.s_tile]})
+                    if (!this.add_tile(this.m[0], this.m[1], inv.tiles[a])) {
+                        inv.rem_tile = inv.tiles[a]
+                        inv.s_tile = -1
                     }
                     
                 }
@@ -204,7 +197,7 @@ class Land extends Map {
 
         this.c.addEventListener('dblclick', e=>{
             if (this.map[this.m[0]][this.m[1]].c == 2) {
-                this.map[this.m[0]][this.m[1]].main.rem(this, TileInfo)
+                this.map[this.m[0]][this.m[1]].main.remove = TileInfo
             }
         })
     }
@@ -298,7 +291,8 @@ function displayTileInfo(shape, node, area, rem=false) {
             r.innerHTML = '<center>✕</center>'
             r.classList = 'tile-info-remove'
             r.addEventListener('click', e=>{
-                shape.rem(area, node)
+                console.log('l', shape.remove)
+                shape.remove = node
             })
             node.appendChild(r)
         }

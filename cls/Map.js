@@ -1,11 +1,14 @@
 class Map {
-    constructor(w, h, s, e) {
+    constructor(w, h, s, e, canvas) {
         this.w = w
         this.h = h;
         this.size = s;
         this.empty = e
+
+        this.c = document.getElementById(canvas);
+        this.ctx = this.c.getContext("2d", {willReadFrequently: true});
         this.map = this.gen_empty();
-        this.tile_list = []
+        
         this.image = undefined
     }
 
