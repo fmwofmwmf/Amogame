@@ -12,22 +12,25 @@
 </head>
 
 <body>
-    <div id="navbar">
-        <div id="page1" class="button">World</div>
-        <div id="page2" class="button">Shop</div>
-        <div id="page3" class="button">Games</div>
+    <div id="main_navbar">
+        <div id="page1" class="navbutton">World</div>
+        <div id="page2" class="navbutton">Shop</div>
+        <div id="page3" class="navbutton">Games</div>
     </div>
-    <div id="day" class="button">D</div>
-    <div id="money"></div>
     <div id="main">
         <div id="world-page">
+            <div id="resource-container" class="container">
+                <div id="resource-content" class="content">
+                    <div id="resource"></div>
+                </div>
+            </div>
             <div id="canvas-container">
                 <div id="canvas-navbar" class="navbar">
                     <div id="canvas-nav-w1" class="navbutton">A1</div>
                     <div id="canvas-nav-w2" class="navbutton">A2</div>
                     <div id="canvas-nav-w3" class="navbutton">A3</div>
                 </div>
-                <div id="canvas-content" class="container">
+                <div id="canvas-content" class="content">
                     <div id='w1' class="areas">
                         <canvas id="biome-canvas-w1" class="biome-canvas"></canvas>
                         <canvas id="land-canvas-w1" class="land-canvas"></canvas>
@@ -48,7 +51,7 @@
                     <div id="display-nav-struct-info" class="navbutton">Struct</div>
                     <div id="display-nav-card-info" class="navbutton">Card</div>
                 </div>
-                <div id="display-content">
+                <div id="display-content" class="content">
                     <div id="display-tile-info">
                         <div id="tile-info">
 
@@ -64,20 +67,18 @@
                             <div id="card-tree-main"></div>
                         </div>
                     </div>
-                     <!-- add content -->
                 </div>
             </div>
             <div id="log-container" class="container">
-                <div id="log-content"></div>
+                <div id="log-content" class="content"></div>
             </div>
             <div id="inv-container" class="container">
                 <div id="inv-navbar" class="navbar">
                     <div id="inv-nav-tile" class="navbutton">Tiles</div>
                     <div id="inv-nav-card" class="navbutton">Cards</div>
                     <div id="inv-nav-box" class="navbutton">Boxes</div>
-                    <!-- add nav buttons -->
                 </div>
-                <div id="inv-content">
+                <div id="inv-content" class="content">
                     <div id="inv-tile"></div>
                     <div id="inv-card"></div>
                     <div id="inv-box"></div>
@@ -89,42 +90,6 @@
             <canvas id="game-1-canvas"></canvas>
         </div>
     </div>
-
-        <!-- <div id="div1">
-            <div id="canvas-cont">
-                <canvas id="biome"></canvas>
-                <canvas id="land"></canvas>
-            </div>
-            <div id="hotbar"></div>
-            <div class="right">
-                <div id="Tileinfo"></div>
-                <div id="Structinfo"></div>
-            </div>
-        </div>
-        <div id="div2">
-            <div class="left">
-                <div id="shop-button" class="button">Shop</div>
-                <div id="box-button" class="button">Boxes</div>
-            </div>
-            <div id="lootboxes" style="display:none;">
-                <div id="lootopen"></div>
-                <div id="lootcrates"></div>
-            </div>
-            <div id="shop"></div>
-        </div>
-        <div id="div3">
-            <div id="tile-view">
-                <div id="tile-view-m"></div>
-            </div>
-            <div id="tile-mods"></div>
-            <div id="tile-inv"></div>
-        </div>
-        <div id="div4">
-            <div id="card-tree">
-                <div id="card-tree-main"></div>
-            </div>
-            <div id="card-inv"></div>
-        </div> -->
     </div>
     <script src="stuff/load.js"></script>
     <script src="stuff/algorithms.js"></script>

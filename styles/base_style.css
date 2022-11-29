@@ -1,7 +1,20 @@
+/* color variables */
+:root {
+   --bg_one: #BBDBBE;
+   --bg_two:#DEEBDD;
+   --content_bg:#89D4CF;
+   --nav_bg: #9bf2ec;
+   --nav_bg_sel: #89D4CF;
+   --nav_bg_hov: #93e6df;
+   --e_bg: #DEEBDD;
+   --e_bg_hov: #c4d0c3;
+}
+
+
 /* General */
 
 .button {
-   background-color: white;
+   background-color:var(--e_bg);
    border: 1px solid black;
    margin: 2px 5px;
    padding: 2px 10px;
@@ -15,32 +28,13 @@
 
 .button:hover {
    transition: 0.3s ease;
-   background-color: #ddd;
+   background-color: var(--e_bg_hov);
    cursor: pointer;
 }
 
 .button:active {
-   background-color: #aaa;
+   background-color: var(--bg_one);
 }
-
-#navbar > .button {
-   border: none;
-}
-
-#div2 > .left > .button {
-   border: none;
-   padding: 2px 0px;
-   border-bottom: 2px solid black;
-}
-
-#div2 > .left > .button:hover {
-   background: linear-gradient(0deg, #eee, rgba(170, 170, 170, 0) 60%);
-}
-
-#div2 > .left > .button:active {
-   background: #eee
-}
-
 
 /* navbar */
 .navbar{
@@ -48,29 +42,48 @@
    flex-direction: row;
    gap: 10px;
    align-items: flex-start;
-   border-bottom: 2px solid black;
+   translate: 10px 10px;
 }
 
-.navbutton {
+.navbar > .navbutton {
    padding: 2px 5px;
+   background: var(--nav_bg);
+}
+
+.navbar > :not(.nav_active).navbutton:hover {
+   background: var(--nav_bg_hov);
+}
+
+.navbar > .nav_active {
+   background:var(--nav_bg_sel);
+}
+
+#main_navbar > .navbutton {
+   padding: 10px 5px;
+}
+
+#main_navbar > .navbutton.hover {
+   background: var(--nav_bg_hov);
 }
 
 /* tile selectables */
-.hotbar-e , .tile-inv-e {
+.hotbar-e {
    padding: 2px 5px;
    display: inline-block;
    border: 2px solid;
    border-color: black;
    margin: 2px;
    border-radius: 5px;
+   background-color: var(--e_bg);
 }
 
 .hotbar-e-selected {
    border-color: rgb(160, 64, 28);
 }
 
-:not(.hotbar-e-selected).hotbar-e:hover, .tile-inv-e:hover {
-   border-color: rgb(150, 110, 96);
+.hotbar-e:hover {
+   transition: 0.5s;
+   background-color: var(--e_bg_hov);
 }
 
 
@@ -82,12 +95,15 @@
    justify-content: center;
    border-style: solid;
    margin: 1px;
-   background-color: cornsilk;
+   background-color: var(--e_bg);
 }
 
 .card-inv-e:hover {
    translate: 0px -10px;
    transition-duration: 0.3s;
+   border-color: rgb(150, 110, 96);
+   transition: 0.5s;
+   background-color: var(--e_bg_hov);
 }
 
 

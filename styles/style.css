@@ -1,46 +1,46 @@
 body{
     display: grid;
+    height: 100vh;
     grid-template-columns: 0.3fr 3fr 0.3fr;
-    user-select: none;
-}
-
-#money {
-    width: auto;
-    border-style: solid;
-    border-left: 0px;
-    border-right: 0px;
-    border-bottom: 0px;
-    padding: 10px 5px;
-    margin: 5px;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-
-    grid-column: 2;
-    grid-row: 2;
-}
-
-.resource {
+    grid-template-rows: 0fr 1fr;
     margin: 0;
-    width: auto;
+    user-select: none;
+    position: relative;
+    background-color: #e5e5f7;
+    /* background-image: 
+    radial-gradient(ellipse farthest-corner at 0% 0% ,
+     #013440, #013440 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 50% 0% ,
+     #025a6e, #025a6e 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 0% 100% ,
+     #014026, #014026 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 0% 0% ,
+     #403801, #403801 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 100% 100% ,
+     #5d9caa, #5d9caa 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 50% 100% ,
+     #130140, #130140 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 100% 0% ,
+     #287e3f, #287e3f 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 100% 0% ,
+     #926551, #926551 20%, #002635 20%);
+  background-size: 4em 2em; 
+
+    background-repeat: repeat;  */
 }
 
-#navbar {
+#main_navbar {
     grid-column: 2/3;
     grid-row: 1;
     display: flex;
     justify-content: center;
 }
 
-#day {
-    grid-column: 3;
-}
-
 #main {
     display: grid;
     grid-column: 2;
-    grid-row: 3;
+    grid-row: 2;
+    min-height: 0;
 }
 
 /* MAIN STUFF */
@@ -188,13 +188,6 @@ body{
 
 /* TILES */
 
-
-
-#div3 {
-    grid-template-columns: 1fr 1fr;
-    display: grid;
-}
-
 /* #tile-view {
     grid-column: 1;
     grid-row: 1;
@@ -245,11 +238,6 @@ body{
 
 
 /* CARDS */
-
-#div4 {
-    grid-template-columns: 1fr 1fr;
-    display: grid;
-}
 
 #card-tree {
     margin: 1px;
