@@ -1,5 +1,3 @@
-const resources = document.getElementById('money')
-
 let eco = {
     res: {
         'wood':0,
@@ -26,15 +24,16 @@ let eco = {
         }
         return true
     },
-    updateRes() {
-        resources.innerHTML = ''
-        for (const k in this.res) {
+    updateRes(res = this.res) {
+        this.disp.innerHTML = ''
+        for (const k in res) {
             let s = document.createElement('p')
             s.classList += "resource"
-            s.innerHTML = `${k}: ${this.res[k]} `
-            resources.appendChild(s)
+            s.innerHTML = `${k}: ${res[k]} `
+            this.disp.appendChild(s)
         }
     }
+    
 }
-
+eco.disp = document.getElementById('money')
 eco.updateRes()

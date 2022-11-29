@@ -27,18 +27,26 @@
                     <div id="canvas-nav-w2" class="navbutton">A2</div>
                     <div id="canvas-nav-w3" class="navbutton">A3</div>
                 </div>
+                <div id="canvas-toggle">
+                    <div id="canvas-toggle-b" class="button">-B</div>
+                    <div id="canvas-toggle-p" class="button">-P</div>
+                    <div id="canvas-toggle-s" class="button">D</div>
+                </div>
                 <div id="canvas-content" class="container">
                     <div id='w1' class="areas">
                         <canvas id="biome-canvas-w1" class="biome-canvas"></canvas>
                         <canvas id="land-canvas-w1" class="land-canvas"></canvas>
+                        <canvas id="path-canvas-w1" class="path-canvas"></canvas>
                     </div>
                     <div id="w2" class="areas">
                         <canvas id="biome-canvas-w2" class="biome-canvas"></canvas>
                         <canvas id="land-canvas-w2" class="land-canvas"></canvas>
+                        <canvas id="path-canvas-w2" class="path-canvas"></canvas>
                     </div>
                     <div id="w3" class="areas">
                         <canvas id="biome-canvas-w3" class="biome-canvas"></canvas>
                         <canvas id="land-canvas-w3" class="land-canvas"></canvas>
+                        <canvas id="path-canvas-w3" class="path-canvas"></canvas>
                     </div>
                 </div>
             </div>
@@ -47,6 +55,7 @@
                     <div id="display-nav-tile-info" class="navbutton">Tile</div>
                     <div id="display-nav-struct-info" class="navbutton">Struct</div>
                     <div id="display-nav-card-info" class="navbutton">Card</div>
+                    <div id="display-nav-path-info" class="navbutton">Path</div>
                 </div>
                 <div id="display-content">
                     <div id="display-tile-info">
@@ -62,6 +71,11 @@
                     <div id="display-tile-card">
                         <div id="card-info">
                             <div id="card-tree-main"></div>
+                        </div>
+                    </div>
+                    <div id="display-tile-path">
+                        <div id="path-info">
+                            
                         </div>
                     </div>
                      <!-- add content -->
@@ -137,6 +151,8 @@
     <script src="cls/Map.js"></script>
     <script src="cls/Biomes.js"></script>
     <script src="cls/Land.js"></script>
+    <script src="cls/Paths.js"></script>
+
     <script src="cls/Area.js"></script>
     <script src="cls/Navbar.js"></script>
 

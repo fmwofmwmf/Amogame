@@ -67,7 +67,7 @@ function select(j) {
             inv.tileHTML[inv.s_tile].className = "hotbar-e"
         inv.tileHTML[j].className = "hotbar-e hotbar-e-selected"
         inv.s_tile = j
-        displayTileInfo(inv.tiles[j], TileInfo, null, true)
+        displayTileInfo(inv.tiles[j], TileInfo)
     }
 }
 
@@ -139,6 +139,7 @@ function display_cinv() {
                             const ch = current_struc.cards[i];
                             if (ch.card==null) {
                                 ch.tryadd(e)
+                                console.log(e)
                                 break;
                             }
                         }

@@ -42,8 +42,8 @@ class CardHolder {
         }
         this.card = null
         this.open = false
-        this.disp = null
         this.tryunlock()
+        this.makeInfoCard()
     }
 
     tryunlock() {
@@ -67,6 +67,7 @@ class CardHolder {
     }
 
     tryadd(e) {
+        console.log(this.card, '1')
         if (!this.typeCheck(e.type)) {
             return;
         }
@@ -74,55 +75,41 @@ class CardHolder {
             inv.add_card = this.card
         }
         this.card = e
+        console.log(this.card, '2', inv.cards)
         inv.rem_card = this.card
-        this.disp.classList = 'card tooltip '
-        this.disp.children[0].innerHTML = `${this.card.getInfo()}`
+        console.log(this.card, '3', inv.cards)
+        this.display()
+    }
+
+    makeInfoCard() {
+        this.info = document.createElement('div')
+        this.info.addEventListener('click', e=>{
+            if (this.card) {
+                inv.add_card = this.card
+                this.card = null;
+                this.info.classList += 'nocard '
+                this.info.innerHTML =  ''
+            }
+        })
     }
 
     display() {
-        const civ = document.createElement('div')
-        this.disp = civ
-        civ.classList = 'card tooltip '
-        
+        this.info.classList = 'card tooltip '
+        this.info.innerHTML = ''
         if (!this.open) {
-            civ.classList += 'lockcard '
+            this.info.classList += 'lockcard '
         } else {
             const info = document.createElement('span')
-            
             info.classList = 'cardhold-select'
 
             if (this.card == null) {
-                civ.classList += 'nocard '
+                this.info.classList += 'nocard '
             } else {
                 info.innerHTML = `${this.card.getInfo()}`
             }
-
-            civ.addEventListener('click', e=>{
-                inv.add_card = this.card
-                this.card = null;
-                civ.classList += 'nocard '
-                info.innerHTML =  ''
-            })
-
-            // civ.addEventListener('drop', e=>{
-            //     const t = e.dataTransfer.getData("type")
-            //     if (!this.typeCheck(t)) {
-            //         return;
-            //     }
-            //     const i = e.dataTransfer.getData("index")
-            //     if (this.card!=null) {
-            //         cinv.push(this.card)
-            //     }
-            //     this.card = cinv[i]
-            //     cinv.splice(i, 1)
-            //     display_cinv()
-            //     civ.classList = 'card tooltip '
-            //     info.innerHTML = `${this.card.getInfo()}`
-            // })
-
-            civ.appendChild(info)
+            this.info.appendChild(info)
         }
         
-        return civ
+        return this.info
     }
 }

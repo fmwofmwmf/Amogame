@@ -8,16 +8,6 @@ class Biomes extends Map {
         this.refresh()
     }
 
-    refresh() {
-        this.c.width = this.w*this.size;
-        this.c.height = this.h*this.size;
-
-        // this.tile_list.forEach(t => {
-        //     t.tile.plot(t.x, t.y, this.w, this.h, this.map)
-        // });
-        this.render()
-    }
-
     render() {
         const colors = ['lightGrey', 'lightGreen', 'cornsilk', 'darkSeaGreen', 'LawnGreen']
         let s = []

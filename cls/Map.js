@@ -12,6 +12,16 @@ class Map {
         this.image = undefined
     }
 
+    refresh() {
+        this.c.width = this.w*this.size;
+        this.c.height = this.h*this.size;
+        this.render()
+    }
+
+    render() {
+
+    }
+
     gen_empty() {
         const arr = [];
         for (let j = 0; j < this.w; j++) {
