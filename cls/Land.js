@@ -1,5 +1,3 @@
-
-
 class Land extends Map {
 
     m = [-1,-1];
@@ -69,18 +67,12 @@ class Land extends Map {
         return out
     }
 
-    refresh() {
-        this.c.width = this.w*this.size;
-        this.c.height = this.h*this.size;
-
+    render() {
         this.map = this.gen_empty()
         this.tile_list.forEach(t => {
             t.tile.plot(t.x, t.y, this.w, this.h, this.map)
         });
-        this.render()
-    }
-
-    render() {
+        
         let s = []
         this.ctx.clearRect(0, 0, this.c.width, this.c.height)
         for (let i = 0; i < this.w; i++) {
@@ -171,6 +163,8 @@ class Land extends Map {
             if ((w!=this.m[0] || h!=this.m[1]) && w>-1 && h>-1 && this.selected[0]==-1) {
                 this.user_overlay(w, h)
             }
+            this.m[0] = w;
+            this.m[1] = h;
         })
 
         this.c.addEventListener('click', e => {
@@ -189,9 +183,8 @@ class Land extends Map {
                 } else {
                     this.selected = [this.m[0], this.m[1]]
                     add_struct_info(this.map[this.m[0]][this.m[1]], [this.m[0], this.m[1]], this)
-                    this.user_overlay(this.m[0], this.m[1])
                 }
-                
+                this.user_overlay(this.m[0], this.m[1])
             }
         })
 
@@ -209,94 +202,10 @@ var current_tile = null
  * 
  * @param {Tile} shape Tile to display info of
  */
-function displayTileInfo(shape, node, area, rem=false) {
+function displayTileInfo(shape, node) {
     current_tile = shape
     node.innerHTML = ''
-    const info = shape.getName()
-
-    const tier = document.createElement('div')
-    tier.className = 'tile-info-tier'
-    tier.innerHTML = info.tier
-
-    const name = document.createElement('div')
-    name.className = 'tile-info-name'
-    name.innerHTML = info.name
-    name.style.fontSize = `${Math.min(180/info.name.length, 20)}px`
-
-    const stars = document.createElement('div')
-    stars.className = 'tile-info-stars'
-    stars.innerHTML = info.stars
-
-
-    const body = document.createElement('div')
-    body.className = 'tile-info-body'
-    const body1 = tile_to_canvas(100, 100, shape)
-    body1.className = 'tile-info-body-prev'
-    const body2 = document.createElement('div')
-    body2.className = 'tile-info-body-img'
-
-    body2.innerHTML = `<br>anime girl picture<br>anime girl picture`
-    body2.style.display = 'none';
-    
-    const change = document.createElement('span')
-    change.innerHTML = 'S'
-    let y = 0
-    change.addEventListener('click', e=>{
-        if (y==0) {
-            y=1;
-            body1.style.display = 'none';
-            body2.style.display = 'block';
-        } else if (y==1) {
-            y=0;
-            body1.style.display = 'block';
-            body2.style.display = 'none';
-        }
-    })
-    change.className = 'tile-info-switch'
-    
-    body.appendChild(body1)
-    body.appendChild(body2)
-
-    const other = document.createElement('div')
-    other.className = 'tile-info-other'
-    other.innerHTML = `${info.rank} ${info.ratio}`
-
-    const cards = document.createElement('div')
-    cards.className = 'tile-info-cards'
-
-    shape.cards.forEach(c => {
-        cards.appendChild(c.display())
-    });
-
-    const progress = document.createElement('progress')
-    progress.id = 'tile-info-progress'
-    shape.progresses.push(progress)
-    progress.value = 0
-    progress.max = shape.maxticks
-
-    node.appendChild(body)
-    node.appendChild(change)
-    node.appendChild(name)
-    node.appendChild(stars)
-    node.appendChild(tier)
-    node.appendChild(other)
-    node.appendChild(cards)
-    node.appendChild(progress)
-
-    node.style.borderColor = colors[shape.biome];
-    //if center add remove button
-    if (rem && area) {
-        if (area.tile_list.find(e=>{return e.tile==shape})) {
-            let r = document.createElement('button')
-            r.innerHTML = '<center>✕</center>'
-            r.classList = 'tile-info-remove'
-            r.addEventListener('click', e=>{
-                console.log('l', shape.remove)
-                shape.remove = node
-            })
-            node.appendChild(r)
-        }
-    }
+    node.appendChild(shape.getInfoCard())
 }
 
 function tile_to_canvas(x, y, shape) {
@@ -325,6 +234,7 @@ var current_struc = null
 function add_struct_info(element, pos, area, draw=false) {
     StructInfo.innerHTML = `(${pos[0]+1}, ${pos[1]+1})<br>`
     current_struc = null
+    pathinfo.innerHTML = ''
     switch (element.c) {
         case 1:
             StructInfo.innerHTML += biomenames[area.biome_map.map[pos[0]][pos[1]]]
@@ -334,7 +244,7 @@ function add_struct_info(element, pos, area, draw=false) {
             if (draw) {
                 element.main.draw_border(pos[0], pos[1], area.size, area.ctx)
             }
-            displayTileInfo(element.main, TileInfo, area, true);
+            displayTileInfo(element.main, TileInfo);
             StructInfo.innerHTML += `Center
             <br>${biomenames[area.biome_map.map[pos[0]][pos[1]]]}`
             break;
@@ -342,7 +252,9 @@ function add_struct_info(element, pos, area, draw=false) {
             current_struc = element
             display_navbar.switch_tab(1)
             StructInfo.innerHTML = `(${pos[0]+1}, ${pos[1]+1}) ${biomenames[area.biome_map.map[pos[0]][pos[1]]]}`
-            StructInfo.appendChild(element.getInfoCard(pos))
+            StructInfo.appendChild(element.getInfoCard())
+            pathinfo.appendChild(element.getPathCard())
+            console.log(element.getPathCard())
             break;
         default:
             StructInfo.innerHTML += 'Nothing'

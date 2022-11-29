@@ -1,4 +1,3 @@
-const resources = document.getElementById('resource')
 
 let eco = {
     res: {
@@ -71,15 +70,16 @@ let eco = {
         }
         return "big num"
     },
-    updateRes() {
-        resources.innerHTML = ''
-        for (const k in this.res) {
+    updateRes(res = this.res) {
+        this.disp.innerHTML = ''
+        for (const k in res) {
             let s = document.createElement('p')
-            s.classList += "resource-item"
-            s.innerHTML = `${this.parse_num(this.res[k])} <br> ${this.icon[k]}`
-            resources.appendChild(s)
+            s.classList += "resource"
+            s.innerHTML = `${this.parse_num(res[k])} <br> ${this.icon[k]}`
+            this.disp.appendChild(s)
         }
     }
+    
 }
-
+eco.disp = document.getElementById('resource')
 eco.updateRes()

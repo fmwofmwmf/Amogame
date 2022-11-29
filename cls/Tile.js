@@ -5,8 +5,11 @@ class Tile {
         this.center = c;
         this.biome = b;
         this.data = data
-        this.data[c[0]][c[1]].c = 2
-        this.data[c[0]][c[1]].main = this
+        this.city = this.data[c[0]][c[1]]
+        this.city.c = 2
+        this.city.main = this
+        this.city.base_stats = {max_paths:3};
+        
         this.contents = {count:[], struct:[]}
         this.cards = [new CardHolder(this, ['mod-t', 'branch']), new CardHolder(this, ['mod-t', 'branch']), new CardHolder(this, ['mod-t', 'branch'])]
 
@@ -14,18 +17,26 @@ class Tile {
         this.area = null;
 
         this.fixH()
-        this.fixW()
-        
+        this.fixW()      
         
         this.updateContents();
+        
 
         this.calcGrade();
         this.bindStruct();
         this.global = null;
 
-        this.progresses = []
         this.ticks = 0
-        this.maxticks = 10
+        this.maxticks = 2
+        
+        this.maxRes = {
+            energy:[1000],
+            food:[1000],
+        }
+        this.inv = Object.create(eco)
+        this.inv.res = Object.create(eco.res)
+
+        this.makeInfoCard()
     }
 
     time(t) {
@@ -34,9 +45,7 @@ class Tile {
             this.ticks = 0
             eco.add = this.getIncome()
         }
-        this.progresses.forEach(p => {
-            p.value = this.ticks
-        });
+        this.progress.value = this.ticks
     }
 
     plot(x, y, w, h, inp_map) {
@@ -76,8 +85,6 @@ class Tile {
         inv.add_tile = this
         this.area.refresh()
         this.area=null;
-        display.innerHTML = 'Nothing'
-        display.style.borderColor = 'red'
     }
 
     bindStruct() {
@@ -121,20 +128,23 @@ class Tile {
         console.log(this, this.contents, this.tier)
     }
 
-    getIncome() {
-        let eco = {
-            'wood':this.contents.struct.length,
-            'stone':0,
-            'energy':0,
-            'food':this.contents.count[1]
-        }
-        this.contents.struct.forEach(s => {
-            const out = s.getIncome()
-            for (const k in out) {
-                eco[k] += out[k]
+    maxIncome() {
+        let out = {}
+        for (const r in this.maxRes) {
+            if (this.inv.res[r]>this.maxRes[r][0]) {
+                out[r] = this.inv.res[r]-this.maxRes[r][0]
+                this.inv.res[r]=this.maxRes[r][0]
             }
+            this.maxRes[r][1].value = this.inv.res[r]
+        }
+        return out
+    }
+
+    getIncome() {
+        this.contents.struct.forEach(s => {
+            this.inv.add = s.getIncome()
         });
-        return eco
+        return this.maxIncome()
     }
 
     fixW() {
@@ -199,6 +209,130 @@ class Tile {
 
     getCards() {
 
+    }
+
+    makeInfoCard() {
+        this.info = document.createElement('div')
+        this.info.className = 'tile-info'
+
+        this.tierHTML = document.createElement('div')
+        this.tierHTML.className = 'tile-info-tier'
+
+        this.nameHTML = document.createElement('div')
+        this.nameHTML.className = 'tile-info-name'
+
+        this.stars = document.createElement('div')
+        this.stars.className = 'tile-info-stars'
+
+        this.body = document.createElement('div')
+        this.body.className = 'tile-info-body'
+
+        this.body1 = document.createElement('div')
+        this.body1.className = 'tile-info-body-prev'
+
+        this.body2 = document.createElement('div')
+        this.body2.className = 'tile-info-body-img'
+        this.body2.style.display = 'none'
+
+        this.body.appendChild(this.body1)
+        this.body.appendChild(this.body2)
+
+        this.change = document.createElement('span')
+        this.change.innerHTML = 'S'
+    
+        let y = 0
+        this.change.addEventListener('click', e=>{
+            if (y==0) {
+                y=1;
+                this.body1.style.display = 'none';
+                this.body2.style.display = 'block';
+            } else if (y==1) {
+                y=0;
+                this.body1.style.display = 'block';
+                this.body2.style.display = 'none';
+            }
+        })
+        this.change.className = 'tile-info-switch'
+
+        this.other = document.createElement('div')
+        this.other.className = 'tile-info-other'
+
+        this.cardlist = document.createElement('div')
+        this.cardlist.className = 'tile-info-cards'
+
+        this.cards.forEach(c => {
+            this.cardlist.appendChild(c.display())
+        });
+
+        this.progressdiv = document.createElement('div')
+        this.progressdiv.className = 'tile-info-progress'
+
+        this.progress = document.createElement('progress')
+        this.progress.className = 'tile-progress'
+        this.progressdiv.appendChild(this.progress)
+
+        this.r = document.createElement('button')
+        this.r.innerHTML = '<center>✕</center>'
+        this.r.classList = 'tile-info-remove'
+
+        this.r.addEventListener('click', e=>{
+            this.remove = this.info
+        })
+        
+        for (const r in this.maxRes) {
+            const p = document.createElement('progress')
+            p.className = 'tile-progress'
+            this.maxRes[r][1] = p;
+            p.value=0
+            p.max=this.maxRes[r][0]
+            this.progressdiv.appendChild(p)
+        }
+
+        this.info.appendChild(this.tierHTML)
+        this.info.appendChild(this.nameHTML)
+        this.info.appendChild(this.stars)
+        this.info.appendChild(this.body)
+        this.info.appendChild(this.change)
+        this.info.appendChild(this.other)
+        this.info.appendChild(this.cardlist)
+        this.info.appendChild(this.progressdiv)
+        this.info.appendChild(this.r)
+
+        
+    }
+
+    getInfoCard() {
+        const info = this.getName()
+
+        this.tierHTML.innerHTML = info.tier
+
+        this.nameHTML.innerHTML = info.name
+        this.nameHTML.style.fontSize = `${Math.min(180/info.name.length, 20)}px`
+
+        this.stars.innerHTML = info.stars
+
+        this.body1.innerHTML = ''
+        this.body1.appendChild(tile_to_canvas(100, 100, this))
+
+        this.body2.innerHTML = `<br>anime girl picture<br>anime girl picture`
+
+        this.other.innerHTML = `${info.rank} ${info.ratio}`
+
+        this.cards.forEach(c => {
+            c.display()
+        });
+
+        this.progress.value = 0
+        this.progress.max = this.maxticks
+
+        this.info.style.borderColor = colors[this.biome];
+        //if center add remove button
+        if (this.area) {
+            this.r.style.display = 'block'
+        } else {
+            this.r.style.display = 'none'
+        }
+        return this.info
     }
 
     draw_border(x, y, s, ctx) {

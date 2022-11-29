@@ -82,7 +82,7 @@ const funs = {
                     const out = gen_connect([0, 0, s.main.area.w, s.main.area.h],
                         c, e=>{return s.up('b').map[e[0]][e[1]]==s.up('b').map[c[0]][c[1]] &&
                             s.main.area.map[e[0]][e[1]].c!=0}).length*2
-                    return {'energy':out}
+                    return {'food':out}
                 },
                 upcost:(c)=>{return {'energy':15*c.data.level}}
             }, 
@@ -117,12 +117,11 @@ const biomenames = ['nope', 'plains', 'desert', 'forest', 'green place']
 
 /*
 do this
-tetris piece
 cohesion
 mini game - filling stuff , puzzle
 runes orbs
-card system
 card tree!
+PATH ROAD ENERGY
 */
 
 

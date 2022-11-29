@@ -15,6 +15,7 @@
    align-content: flex-start;
 }
 
+
 #resource-container {
    grid-column: 1;
    grid-row: 1;
@@ -82,6 +83,23 @@
 #canvas-content {
    background: none ;
    margin: 0;
+   grid-column: 1/3;
+}
+
+#canvas-navbar{
+   grid-column: 1;
+   grid-row: 1;
+   margin:1px;
+   justify-content: left;
+}
+
+#canvas-toggle{
+   grid-column: 2;
+   grid-row: 1;
+   margin:1px;
+   justify-content: right;
+   display: flex;
+   align-items: flex-end;
 }
 
 .areas {
@@ -109,8 +127,15 @@
    grid-column: 1/3;
 }
 
+
 .areas > canvas {
    width: 100%;
+}
+
+.path-canvas {
+   grid-row: 1/3;
+   grid-column: 1/3;
+   pointer-events: none;
 }
 
 
@@ -125,7 +150,7 @@
    padding: 5px;
 }
 
-#tile-info {
+.tile-info {
    user-select: none;
 
    display: grid;
