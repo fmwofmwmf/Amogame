@@ -1,5 +1,3 @@
-const nextday = document.getElementById('day')
-
 const TileInfo = document.getElementById('tile-info')
 const StructInfo = document.getElementById('struct-info')
 
@@ -38,19 +36,18 @@ class NavBar {
             const nav = this.navs[i];
             if (i == index) {
                 tab.style.display = this.specif[index]
-                nav.style.backgroundColor = '#eee';
+                nav.classList += ' nav_active';
             }
             else {
                 tab.style.display = "none"
-                nav.style.backgroundColor = 'white';
+                nav.classList.remove('nav_active');
             }
         }
     }
 }
 
-const main_navbar = new NavBar("navbar", "main")
+const main_navbar = new NavBar("main_navbar", "main")
 const inv_navbar = new NavBar("inv-navbar", "inv-content")
-const canvas_navbar = new NavBar("canvas-navbar", "canvas-content")
 const display_navbar = new NavBar("display-navbar", "display-content")
 const area_navbar = new NavBar("canvas-navbar", "canvas-content")
 

@@ -1,11 +1,7 @@
 const loot_count = document.getElementById('inv-box')
 const lootinfo = document.getElementById('log-content')
 
-const shop_button = document.getElementById('shop-page')
-const boxes_button = document.getElementById('shop-page')
-
 const store = document.getElementById('shop-page')
-const boxes = document.getElementById('shop-page')
 
 const store_items = [
     {
@@ -191,14 +187,4 @@ function add_loot(crate) {
     crate.cards.forEach(e => {
         inv.add_card = e
     });
-}
-
-shop_button.addEventListener('click', e=>{
-    store.style.display = 'grid'
-    boxes.style.display = 'none'
-})
-
-boxes_button.addEventListener('click', e=>{
-    store.style.display = 'none'
-    boxes.style.display = 'grid'
-})
+} 
