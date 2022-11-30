@@ -21,7 +21,6 @@ class Tile {
         
         this.updateContents();
         
-
         this.calcGrade();
         this.bindStruct();
         this.global = null;
@@ -83,6 +82,11 @@ class Tile {
         console.log('i')
         this.area.remove_tile = this
         inv.add_tile = this
+        this.contents.struct.forEach(s => {
+            for (let i = s.paths.length-1; i > -1; i--) {
+                this.area.path_map.remove = s.paths[i]
+            }
+        });
         this.area.refresh()
         this.area=null;
     }
@@ -125,7 +129,18 @@ class Tile {
         this.tier = g
         this.stars = (this.contents.count[0]-c_to_t[g])
         this.rank = randint(0,125);
-        console.log(this, this.contents, this.tier)
+        //console.log(this, this.contents, this.tier)
+    }
+
+    efficency() {
+        let ef = 1
+        if (this.inv.res.food==0 && this.maxRes.food!=0) {
+            ef*=0.7
+        }
+        if (this.inv.res.energy==0 && this.maxRes.energy!=0) {
+            ef*=0.7
+        }
+        return ef
     }
 
     maxIncome() {
@@ -142,7 +157,13 @@ class Tile {
 
     getIncome() {
         this.contents.struct.forEach(s => {
-            this.inv.add = s.getIncome()
+            s.income_stage_1()
+        });
+        this.contents.struct.forEach(s => {
+            s.income_stage_2()
+        });
+        this.contents.struct.forEach(s => {
+            this.inv.add = s.income_stage_3()
         });
         return this.maxIncome()
     }
@@ -286,6 +307,7 @@ class Tile {
             p.value=0
             p.max=this.maxRes[r][0]
             this.progressdiv.appendChild(p)
+            new Tooltip(p).addVar(()=>`${this.inv.res[r]}/${this.maxRes[r][0]}`)
         }
 
         this.info.appendChild(this.tierHTML)

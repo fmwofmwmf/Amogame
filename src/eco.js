@@ -28,6 +28,22 @@ let eco = {
         "oil":"🛢",
         "orange diamond":"🔶",
     },
+    reset() {
+        this.res = {
+            'wood':0,
+            'stone':0,
+            'energy':0,
+            "grain":0,
+            'food':0,
+            "brick":0,
+            'green octagon':0,
+            "bomb":0,
+            "livestock":0,
+            "cloth":0,
+            "oil":0,
+            "orange diamond":0,
+        }
+    },
     set add(obj) {
         for (const k in obj) {
             this.res[k] += obj[k]
@@ -74,12 +90,29 @@ let eco = {
         this.disp.innerHTML = ''
         for (const k in res) {
             let s = document.createElement('p')
-            s.classList += "resource"
+            s.classList += "resource-item"
             s.innerHTML = `${this.parse_num(res[k])} <br> ${this.icon[k]}`
             this.disp.appendChild(s)
         }
     }
-    
 }
+
+function stringy(ob, pre='') {
+    let a = []
+    for (const k in ob) {
+        if (ob[k]>0) {
+            a.push(`${k}: ${pre}${ob[k]}`)
+        }
+    }
+    let str = ''
+    for (let i = 0; i < a.length; i++) {
+        str+=a[i];
+        if (i!=a.length-1) {
+            str+='<br>'
+        }
+    }
+    return str
+}
+
 eco.disp = document.getElementById('resource')
 eco.updateRes()

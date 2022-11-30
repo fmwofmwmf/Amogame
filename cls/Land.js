@@ -254,7 +254,7 @@ function add_struct_info(element, pos, area, draw=false) {
             StructInfo.innerHTML = `(${pos[0]+1}, ${pos[1]+1}) ${biomenames[area.biome_map.map[pos[0]][pos[1]]]}`
             StructInfo.appendChild(element.getInfoCard())
             pathinfo.appendChild(element.getPathCard())
-            console.log(element.getPathCard())
+            //console.log(element.getPathCard())
             break;
         default:
             StructInfo.innerHTML += 'Nothing'
