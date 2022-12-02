@@ -1,21 +1,29 @@
 /* color variables */
 :root {
+   /* body background */
    --bg_one: #BBDBBE;
    --bg_two:#DEEBDD;
+   /* content background */
    --content_bg:#89D4CF;
+   /* nav backgrounds */
    --nav_bg: #9bf2ec;
    --nav_bg_sel: #89D4CF;
    --nav_bg_hov: #93e6df;
+   /* selectable element background */
    --e_bg: #DEEBDD;
    --e_bg_hov: #c4d0c3;
+   /* generic button background */
+   --b_bg: #9bf2ec;
+   --b_bg_hov: #93e6df;
+   --b_bg_a:#89D4CF;
 }
 
 
 /* General */
 
 .button {
-   background-color:var(--e_bg);
-   border: 1px solid black;
+   background-color:var(--b_bg);
+   border-bottom: 1px solid black;
    margin: 2px 5px;
    padding: 2px 10px;
    border-radius: 2px;
@@ -28,12 +36,18 @@
 
 .button:hover {
    transition: 0.3s ease;
-   background-color: var(--e_bg_hov);
+   background-color: var(--b_bg_hov);
    cursor: pointer;
 }
 
 .button:active {
-   background-color: var(--bg_one);
+   background-color: var(--b_bg_a);
+   border: none;
+}
+
+.button_active {
+   background-color: var(--b_bg_a);
+   border: none;
 }
 
 /* navbar */
@@ -42,12 +56,12 @@
    flex-direction: row;
    gap: 10px;
    align-items: flex-start;
-   translate: 10px 10px;
 }
 
 .navbar > .navbutton {
    padding: 2px 5px;
    background: var(--nav_bg);
+   translate: 10px 10px;
 }
 
 .navbar > :not(.nav_active).navbutton:hover {
@@ -99,10 +113,9 @@
 }
 
 .card-inv-e:hover {
-   translate: 0px -10px;
-   transition-duration: 0.3s;
+   translate: 0px -5px;
+   transition: 0.3s ease-out;
    border-color: rgb(150, 110, 96);
-   transition: 0.5s;
    background-color: var(--e_bg_hov);
 }
 

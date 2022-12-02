@@ -70,11 +70,13 @@ function bindToggle() {
             if (t) {
                 for (let i = 0; i < c.length; i++) {
                     c[i].style.display = 'none'   
+                    button.classList.add("button_active")
                 }
                 t = false
             } else {
                 for (let i = 0; i < c.length; i++) {
-                    c[i].style.display = 'block'   
+                    c[i].style.display = 'block'
+                    button.classList.remove("button_active")   
                 }
                 t = true
             }

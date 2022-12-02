@@ -47,9 +47,9 @@ function loot_roll(amt, contents, weights, tile_rarity=rarity, card_rarity=rarit
 }
 
 /**
- * idk
- * @param {*} rarity 
- * @param {*} bime 
+ * Create a tile with a predetermined rarity
+ * @param {String} rarity 
+ * @param {number} bime if necessary to define
  * @returns 
  */
 function generate_tile_rarity(rarity, bime=-1) {
@@ -63,8 +63,8 @@ function generate_tile_rarity(rarity, bime=-1) {
 }
 
 /**
- * 
- * @param {*} weights 
+ * Given the odds of each category, give the chance in percentage of each category.
+ * @param {number[]} weights 
  * @returns 
  */
 function weights_to_chance(weights) {
@@ -81,9 +81,9 @@ function weights_to_chance(weights) {
 }
 
 /**
- * 
- * @param {*} weights 
- * @param {*} contents 
+ * Given the weights (odds) of each element in contents, return the randomly chosen element in contents.
+ * @param {number[]} weights 
+ * @param {String[]} contents 
  * @returns 
  */
 function which_content(weights, contents) {

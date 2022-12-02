@@ -106,7 +106,6 @@ class CardHolder {
                 this.info.classList += 'nocard '
             }
         }
-        
         return this.info
     }
 }
