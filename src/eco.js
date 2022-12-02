@@ -74,7 +74,7 @@ let eco = {
         this.disp.innerHTML = ''
         for (const k in res) {
             let s = document.createElement('p')
-            s.classList += "resource"
+            s.classList += "resource-item"
             s.innerHTML = `${this.parse_num(res[k])} <br> ${this.icon[k]}`
             this.disp.appendChild(s)
         }

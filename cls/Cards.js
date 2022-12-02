@@ -109,7 +109,6 @@ class CardHolder {
             }
             this.info.appendChild(info)
         }
-        
         return this.info
     }
 }

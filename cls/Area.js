@@ -4,7 +4,6 @@ class Area extends Land {
         this.container = document.getElementById(container);
         this.biome_map = new Biomes(w, h, s, canvas_biome)
         this.path_map = new Path(w, h, s, canvas_path)
-        this.nobiome()
     }
 
     resize(w, h) {
@@ -16,21 +15,6 @@ class Area extends Land {
         this.biome_map.refresh()
     }
 
-    nobiome() {
-        this.toggle_biome = document.createElement('div')
-        this.toggle_biome.className = "button toggle-biome"
-        this.toggle_biome.innerHTML = '-B'
-        this.toggle_biome.addEventListener('click', ()=>{
-            if (this.biome_map.c.style.display == 'none') {
-                this.biome_map.c.style.display = 'block'
-                this.toggle_biome.innerHTML = '-B'
-            } else {
-                this.biome_map.c.style.display = 'none'
-                this.toggle_biome.innerHTML = '+B'
-            }
-        })
-        this.container.appendChild(this.toggle_biome)
-    }
 
     pathEvent() {
         
@@ -45,11 +29,13 @@ function bindToggle() {
             if (t) {
                 for (let i = 0; i < c.length; i++) {
                     c[i].style.display = 'none'   
+                    button.classList.add("button_active")
                 }
                 t = false
             } else {
                 for (let i = 0; i < c.length; i++) {
-                    c[i].style.display = 'block'   
+                    c[i].style.display = 'block'
+                    button.classList.remove("button_active")   
                 }
                 t = true
             }

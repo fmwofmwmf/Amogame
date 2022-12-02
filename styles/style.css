@@ -23,8 +23,16 @@ body{
      radial-gradient(ellipse farthest-corner at 100% 0% ,
      #287e3f, #287e3f 20%, transparent 20%),
      radial-gradient(ellipse farthest-corner at 100% 0% ,
+     #926551, #926551 20%, #002635 20%),
+     radial-gradient(ellipse farthest-corner at 100% 100% ,
+     #5d9caa, #5d9caa 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 50% 100% ,
+     #130140, #130140 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 100% 0% ,
+     #287e3f, #287e3f 20%, transparent 20%),
+     radial-gradient(ellipse farthest-corner at 100% 0% ,
      #926551, #926551 20%, #002635 20%);
-  background-size: 4em 2em; 
+  background-size: 4em 4em; 
 
     background-repeat: repeat;  */
 }
@@ -136,7 +144,7 @@ body{
 }
 
 .tile-info-body-prev {
-    background: radial-gradient(closest-side, #3f87a6, white);
+    background: radial-gradient(closest-side, #3f87a6, rgb(0,0,0,0));
 }
 
 .tile-info-body-img {
