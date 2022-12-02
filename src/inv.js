@@ -15,7 +15,7 @@ const inv = {
         display_inv()
     },
     set rem_tile(tile) {
-        inv.tiles.splice(inv.tiles.find(t=>{return t==tile}), 1)
+        inv.tiles.splice(inv.tiles.indexOf(tile), 1)
         display_inv()
     },
     set add_card(card) {
@@ -29,7 +29,7 @@ const inv = {
 }
 
 
-for (let i = 0; i < 1; i++) {
+for (let i = 0; i < 8; i++) {
     b = randint(5,100);
     inv.add_tile = generate_tile(b, Math.ceil(Math.sqrt(b)/3));
 }

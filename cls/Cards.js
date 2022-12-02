@@ -91,23 +91,20 @@ class CardHolder {
                 this.info.innerHTML =  ''
             }
         })
+        this.tooltip = new Tooltip(this.info)
+        this.tooltip.addTitle('CARD')
+        this.tooltip.addVar(()=>this.card? this.card.getInfo():'nothing')
     }
 
     display() {
-        this.info.classList = 'card tooltip '
+        this.info.classList = 'card '
         this.info.innerHTML = ''
         if (!this.open) {
             this.info.classList += 'lockcard '
         } else {
-            const info = document.createElement('span')
-            info.classList = 'cardhold-select'
-
             if (this.card == null) {
                 this.info.classList += 'nocard '
-            } else {
-                info.innerHTML = `${this.card.getInfo()}`
             }
-            this.info.appendChild(info)
         }
         return this.info
     }

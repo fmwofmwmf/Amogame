@@ -115,6 +115,9 @@ const funs = {
 const colors = ['lightGrey', 'lightGreen', 'cornsilk', 'darkSeaGreen', 'LawnGreen']
 const biomenames = ['nope', 'plains', 'desert', 'forest', 'green place']
 
+function round(num, dig) {
+    return Math.round(num * Math.pow(10,dig)) / Math.pow(10, dig)
+}
 /*
 do this
 cohesion
