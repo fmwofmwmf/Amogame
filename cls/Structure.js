@@ -157,14 +157,14 @@ class Struc {
 
     makeInfoCard() {
         this.info = document.createElement('div')
-        this.info.style.textAlign = 'center'
+        this.info.className = 'info-card'
         this.structCard = document.createElement('div')
         this.modCards = document.createElement('div')
         this.structCard.className = 'struct-info-main'
         this.text = document.createElement('div')
 
         this.incomeCont = document.createElement('div')
-        new Tooltip(this.incomeCont, 'left')
+        new Tooltip(this.incomeCont, 'bottom')
         .addVar(()=>`Efficency: ${this.efficency()*100}%`)
         .addTitle('income:')
         .addList(()=>this.temp_inv.income, (s)=>stringy(s, '+'), 'none')
@@ -173,7 +173,7 @@ class Struc {
         .addTitle('in:')
         .addList(()=>this.temp_inv.p_in, (s)=>stringy(s, '+'), 'none')
 
-        this.incomeCont.className = 'tooltip'
+        this.incomeCont.className = 'income-cont'
         this.inv.disp = document.createElement('div')
 
         this.info.appendChild(this.text)

@@ -1,5 +1,4 @@
 const TileInfo = document.getElementById('tile-info')
-const StructInfo = document.getElementById('struct-info')
 
 class NavBar {
     /**

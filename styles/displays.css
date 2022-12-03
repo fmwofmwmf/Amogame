@@ -1,0 +1,13 @@
+/* Structures */
+
+
+.info-card {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.income-cont{
+   width: fit-content;
+   padding: 0 10px;
+}

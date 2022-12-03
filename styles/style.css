@@ -1,3 +1,11 @@
+/* z-indexes: 
+    0 - background
+    1 - 4 midground
+        1 - navtabs
+        3 - content
+    5 - foreground
+*/
+
 body{
     display: grid;
     height: 100vh;

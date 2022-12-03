@@ -54,14 +54,18 @@
 .navbar{
    display: flex;
    flex-direction: row;
-   gap: 10px;
+   gap: 7px;
    align-items: flex-start;
+   z-index: 1;
 }
 
 .navbar > .navbutton {
-   padding: 2px 5px;
+   padding: 2px 5px 3px 5px;
    background: var(--nav_bg);
-   translate: 10px 10px;
+   translate: 0px 2px;
+   align-self: flex-end;
+   border-radius: 2px;
+   z-index: 0;
 }
 
 .navbar > :not(.nav_active).navbutton:hover {
@@ -122,31 +126,15 @@
 
 /* tool tips */
 
-.tooltip {
-   position: relative;
-}
- 
-.tooltip .tooltiptext {
-   visibility: hidden;
-   width: 120px;
-
-   background-color: rgba(50, 50, 50, 0.90);
-   color: #fff;
-   text-align: center;
-   padding: 5px 0;
-   border-radius: 6px; 
-  
+#tooltip_anchor {
+   display: none;
+   background-color: var(--bg_two);
    position: absolute;
-   left: 50%;
-   transform: translate(-50%, 0);
-   top: calc(100% + 3px);
-   z-index: 1;
-}
- 
-.tooltip:hover .tooltiptext {
-   visibility: visible;
+   z-index: 5;
+   pointer-events: none;
+   max-width: 20vw;
+   word-break: break-all;
+   padding: 5px;
+   border: 1px solid black;
 }
 
-#tooltipfr {
-   border-style: solid;
-}

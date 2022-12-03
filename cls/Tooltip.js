@@ -1,10 +1,4 @@
-const tt = document.getElementById('tooltipfr')
-tt.style.backgroundColor = 'white'
-tt.style.position = 'absolute';
-tt.style.zIndex = 2
-tt.style.pointerEvents = 'none'
-tt.style.maxWidth = '20vw'
-tt.style.wordBreak = 'break-word'
+const anchor = document.getElementById('tooltip_anchor')
 
 class Tooltip {
     content = []
@@ -51,24 +45,26 @@ class Tooltip {
 
     bind() {
         this.root.addEventListener('mouseover', e=>{
-            tt.innerHTML = ''
+            anchor.innerHTML = ''
             this.content.forEach(c => {
                 if (c.update) {
                     c.update()
                 }
-                tt.appendChild(c.node)
+                anchor.appendChild(c.node)
             });
-
+            anchor.style.display = 'block'
             const b = this.root.getBoundingClientRect()
-            const t = tt.getBoundingClientRect()
-            tt.style.display = 'block'
+            const t = anchor.getBoundingClientRect()
+            const pos_top = b.top + b.height / 2 - t.height / 2
             switch (this.align) {
                 //top right bot left
                 case 'right':
-                    tt.style.inset = `${b.top}px auto auto ${b.right}px`
+                    anchor.style.inset = `${pos_top}px auto auto ${b.right}px`
+                    anchor.style.marginLeft = "5px"
                     break;
                 case 'left':
-                    tt.style.inset = `${b.top}px auto auto ${b.left-(t.right-t.left)}px`
+                    anchor.style.inset = `${pos_top}px auto auto ${b.left-(t.right-t.left)}px`
+                    anchor.style.marginRight = "5px"
                     break;
                 case 'bot':
             
@@ -79,7 +75,7 @@ class Tooltip {
             
         })
         this.root.addEventListener('mouseout', e=>{
-            tt.style.display = 'none'
+            anchor.style.display = 'none'
         })
     }
 }

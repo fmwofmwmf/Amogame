@@ -100,7 +100,8 @@ for (let i = 0; i < 3; i++) {
 }
 
 function resize() {
-    const w = window.innerWidth*0.4
+    const w = Math.max(400, window.innerWidth*0.4)
+    document.getElementById("canvas-content").style.height = (w*2/3).toString() + "px"
     areas.forEach(area => {
         area.resize(w, w*0.8)
     });
