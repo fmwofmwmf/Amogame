@@ -3,52 +3,114 @@ class Area extends Land {
         super(w, h, s, canvas_land);
         this.container = document.getElementById(container);
         this.biome_map = new Biomes(w, h, s, canvas_biome)
-        this.path_map = new Path(w, h, s, canvas_path)
+        //this.path_map = new Path(w, h, s, canvas_path)
         this.pathEvent()
+
+        this.container.width = w*s
+        this.container.height = h*s
+        this.transform(-10,-10,this.size)
+
+        document.addEventListener('keydown', e => {
+            const callback = {
+                "ArrowUp"    : ()=>{if (this.size!=30) {this.move(0,0,1)}},
+                "ArrowDown"  : ()=>{if (this.size>4) {this.move(0,0,-1)}},
+            }[e.key]
+            callback?.()
+            console.log(callback, this.size)
+        });
     }
 
     resize(w, h) {
         this.container.width = w
         this.container.height = h
-        this.size = Math.min(w/this.w, h/this.h)
-        this.refresh()
-        this.biome_map.size = this.size
-        this.biome_map.refresh()
-        this.path_map.size = this.size
-        this.path_map.refresh()
+        this.c.width = w
+        this.c.height = h
+        this.biome_map.c.width = w
+        this.biome_map.c.height = h
+        this.render()
+        this.biome_map.newrender(this.render_box)
+        //this.path_map.refresh()
     }
+
+    move(dx, dy, ds) {
+        this.transform(this.xoff+dx, this.yoff+dy, this.size+ds)
+    }
+
+    //offsets assume top left is at (0, 0)
+    transform(x, y, s) {
+        this.xoff = x;
+        this.yoff = y;
+        this.render_box = {
+            align_L:Math.floor(x/s),
+            align_T:Math.floor(y/s),
+            align_W:Math.ceil((this.c.width)/s),
+            align_H:Math.ceil((this.c.height)/s),
+            L:x/s,
+            T:y/s,
+            W:this.c.width/s,
+            H:this.c.height/s
+        }
+        
+        if (this.size!=s) {
+            this.size = s;
+            this.render(this.render_box)
+        } else {
+            this.refresh(this.render_box, false)
+        }
+        this.biome_map.transform(this.render_box, this.size)
+        
+    }
+
 
     pathEvent() {
         this.c.draggable = 'true';
+        let ppos = [,]
         this.c.addEventListener('dragstart', e=>{
-            const cb = this.c.getBoundingClientRect()
-            const w = Math.floor((e.clientX-cb.left)/this.size)
-            const h = Math.floor((e.clientY-cb.top)/this.size)
-            
-            e.dataTransfer.setDragImage(nothingimage(), 0, 0);
-            
-            if (this.map[w][h].c==3 || this.map[w][h].c==2) {
-                e.dataTransfer.setData("good", true);
-                e.dataTransfer.setData("w", w);
-                e.dataTransfer.setData("h", h);
+            if (!pathmode) {
+                ppos = [e.clientX, e.clientY]
+                e.dataTransfer.setDragImage(nothingimage(), 0, 0);
+                
+            } else {
+                const cb = this.c.getBoundingClientRect()
+                const w = Math.floor((e.clientX-cb.left)/this.size)
+                const h = Math.floor((e.clientY-cb.top)/this.size)
+                if (this.map[w][h].c==3 || this.map[w][h].c==2) {
+                    e.dataTransfer.setData("good", true);
+                    e.dataTransfer.setData("w", w);
+                    e.dataTransfer.setData("h", h);
+                }
             }
-            return false
+            
         })
 
+        let moved = false
         this.c.addEventListener('dragover', e=>{
+            if (!moved) {
+                if (!pathmode) {
+                    this.move(ppos[0]-e.clientX, ppos[1]-e.clientY, 0)
+                    ppos = [e.clientX, e.clientY]
+                }
+                moved = true
+                setTimeout(() => {
+                    moved = false
+                }, 10);
+            }
             e.preventDefault()
         })
 
         this.c.addEventListener('drop', e=>{
-            if (e.dataTransfer.getData('good')) {
-                const cb = this.c.getBoundingClientRect()
-                const w = Math.floor((e.clientX-cb.left)/this.size), h = Math.floor((e.clientY-cb.top)/this.size),
-                w1 = e.dataTransfer.getData('w'), h1 = e.dataTransfer.getData('h');
-                const f = this.map[w][h], t = this.map[w1][h1];
-                if ((t.c==3 || t.c==2) && f!=t) {
-                    this.path_map.makepath([parseInt(w1),parseInt(h1)], [w,h], this.map)
+            if (pathmode) {
+                if (e.dataTransfer.getData('good')) {
+                    const cb = this.c.getBoundingClientRect()
+                    const w = Math.floor((e.clientX-cb.left)/this.size), h = Math.floor((e.clientY-cb.top)/this.size),
+                    w1 = e.dataTransfer.getData('w'), h1 = e.dataTransfer.getData('h');
+                    const f = this.map[w][h], t = this.map[w1][h1];
+                    if ((t.c==3 || t.c==2) && f!=t) {
+                        this.path_map.makepath([parseInt(w1),parseInt(h1)], [w,h], this.map)
+                    }
                 }
             }
+            
         })
     }
 }
@@ -85,25 +147,33 @@ function bindToggle() {
 
     toggle(document.getElementById('canvas-toggle-b'), 'biome-canvas');
     toggle(document.getElementById('canvas-toggle-p'), 'path-canvas');
-    toggle(document.getElementById('canvas-toggle-s'), 's-canvas');
+    document.getElementById('canvas-toggle-s').addEventListener('click', e => {
+        if (pathmode) {
+            document.getElementById('canvas-toggle-s').classList.remove("button_active")
+            pathmode = false
+        } else {
+            document.getElementById('canvas-toggle-s').classList.add("button_active")
+            pathmode = true
+        }
+    });
 }
-
+var pathmode = false
 bindToggle()
 
 const restrict = [450, 300]
-const siz = [[15, 10], [30, 20], [70, 20]]
+const siz = [[30, 20], [30, 20], [300, 300]]
 const areas = []
 
 for (let i = 0; i < 3; i++) {
-    const s = Math.min(restrict[0]/siz[i][0], restrict[1]/siz[i][1])
+    const s = 15
     areas.push(new Area(siz[i][0], siz[i][1], s, `land-canvas-w${i+1}`, `biome-canvas-w${i+1}`, `path-canvas-w${i+1}`, `w${i+1}`))
 }
 
 function resize() {
     const w = Math.max(400, window.innerWidth*0.4)
-    document.getElementById("canvas-content").style.height = (w*2/3).toString() + "px"
     areas.forEach(area => {
-        area.resize(w, w*0.8)
+        if (w>1) area.resize(window.innerWidth,
+            window.innerHeight)
     });
 }
 resize()

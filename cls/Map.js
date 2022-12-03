@@ -8,18 +8,11 @@ class Map {
         this.c = document.getElementById(canvas);
         this.ctx = this.c.getContext("2d", {willReadFrequently: true});
         this.map = this.gen_empty();
-        
-        this.image = undefined
-    }
 
-    refresh() {
         this.c.width = this.w*this.size;
         this.c.height = this.h*this.size;
-        this.render()
-    }
-
-    render() {
-
+        
+        this.image = undefined
     }
 
     gen_empty() {

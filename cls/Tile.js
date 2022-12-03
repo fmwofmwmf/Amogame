@@ -87,7 +87,7 @@ class Tile {
                 this.area.path_map.remove = s.paths[i]
             }
         });
-        this.area.refresh()
+        this.area.render()
         this.area=null;
     }
 
@@ -359,7 +359,7 @@ class Tile {
 
     draw_border(x, y, s, ctx) {
         const borders = getborders(this.data, e=>{return e.c!=0})
-        
+
         ctx.strokeStyle = 'red';
         borders.forEach(e => {
             ctx.beginPath();
