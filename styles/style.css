@@ -1,7 +1,7 @@
 body{
     display: grid;
     height: 100vh;
-    grid-template-columns: 0.3fr 3fr 0.3fr;
+    grid-template-columns: 0fr 3fr 0fr;
     grid-template-rows: 0fr 1fr;
     margin: 0;
     user-select: none;
@@ -42,6 +42,7 @@ body{
     grid-row: 1;
     display: flex;
     justify-content: center;
+    display:none;
 }
 
 #main {

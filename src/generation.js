@@ -241,6 +241,18 @@ function biome(w, h, options, weights) {
             }
         }
     }
-
     return base
 }
+
+function newbiome(x, y, w, h) {
+    let out = []
+    for (let i = 0; i < w; i++) {
+        out.push(new Array(h))
+        for (let j = 0; j < h; j++) {
+            out[i][j]=(noisestuff(x+i,y+j, 10, 4, 0)+1)
+        }
+    }
+    return out
+}
+console.log(biome(50,20,[1, 2, 3, 4], [30,30,30,30]), 'old')
+console.log(newbiome(0,0,50,20), 'new')
