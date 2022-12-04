@@ -105,7 +105,7 @@
    grid-column: 1;
    grid-row: 1;
    justify-content: left;
-   z-index:2;
+   z-index:4;
 }
 
 #canvas-toggle{
@@ -115,7 +115,7 @@
    justify-content: right;
    display: flex;
    align-items: flex-end;
-   Z-INDEX:2;
+   z-index:4;
 }
 
 #canvas-info {
@@ -133,7 +133,6 @@
    display: grid;
    position: relative;
    width: fit-content;
-   border: solid var(--content_bg) 5px;
 }
 
 .land-canvas {

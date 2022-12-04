@@ -115,8 +115,8 @@ class Land extends Map {
         this.ctx.fillRect(0, 0, this.c.width, this.c.height)
         this.ctx.globalAlpha = 1
         
-        for (let i = box.align_L; i < box.align_W; i++) {
-            for (let j = box.align_T; j < box.align_H; j++) {
+        for (let i = box.align_L; i < box.align_L+box.align_W; i++) {
+            for (let j = box.align_T; j < box.align_T+box.align_H; j++) {
                 this.ctx.beginPath();
                 const x = this.size*(i-box.L), y = this.size*(j-box.T)
 
@@ -146,6 +146,9 @@ class Land extends Map {
     }
 
     renderpixel(ob, x, y) {
+        if (ob.c!=0) {
+            this.ctx.clearRect(x, y, this.size, this.size)
+        }
         switch (ob.c) {
             case 0:
                 // this.ctx.globalAlpha = 0.5
@@ -173,9 +176,7 @@ class Land extends Map {
                 this.ctx.fillStyle = 'rgba(0,0,0,0)'
                 break;
         }
-        if (ob.c!=0) {
-            this.ctx.clearRect(x, y, this.size, this.size)
-        }
+        
     }
 
     inside(x,y) {
@@ -274,11 +275,10 @@ function tile_to_canvas(x, y, shape) {
     const s = Math.min(x/shape.w, y/shape.h)
     const can = document.createElement('canvas')
     const cx = can.getContext('2d')
-    can.width = s*shape.w
+    can.width  = s*shape.w
     can.height = s*shape.h
     const newcol = ['rgba(0,0,0,0)', 'purple', 'purple', 'purple', 'purple']
     render_grid(s, shape.data, cx, newcol)
-
     return can
 }
 

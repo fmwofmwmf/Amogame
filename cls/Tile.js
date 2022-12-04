@@ -4,7 +4,7 @@ class Tile {
         this.h = h
         this.center = c;
         this.biome = b;
-        this.data = data
+        this.data = data;
         this.city = this.data[c[0]][c[1]]
         this.city.c = 2
         this.city.main = this
@@ -63,7 +63,7 @@ class Tile {
                 let tie = this.data[i][j];
                 if (mape.c!=0 && tie.c!=0) return false;
 
-                newmap[i][j]=tie
+                newmap[i][j] = tie;
             }
         }
 

@@ -6,7 +6,18 @@ class Biomes extends Map {
         this.map = newbiome(0,0,this.w, this.h) //biome(this.w, this.h, [1, 2, 3, 4], [30,30,30,30])
     }
 
-    transform(box, s) {
+    takeimage(box) {
+
+        this.image = {
+            L:box.L,
+            T:box.T,
+            W:box.W,
+            H:box.H, 
+            img:this.ctx.getImageData(0, 0,this.c.width,this.c.height)
+        }
+    }
+
+    transform(box, s) { 
         if (this.image===undefined || this.size!=s) {
             this.size = s;
             this.newrender(box)
@@ -14,25 +25,21 @@ class Biomes extends Map {
             this.ctx.rect(0, 0, this.c.width, this.c.height);
             this.ctx.fillStyle = 'grey';
             this.ctx.fill();
-            this.ctx.putImageData(this.image.img, (this.image.L-box.L)*this.size, (this.image.T-box.T)*this.size, 0, 0, this.c.width, this.c.height)
+            
+            this.ctx.putImageData(this.image.img, Math.round((this.image.L-box.L)*this.size), Math.round((this.image.T-box.T)*this.size),
+            0, 0, this.c.width, this.c.height)
             this.partialrender(box)
-            // this.image = {
-            //     L:box.L,
-            //     T:box.T,
-            //     W:box.W,
-            //     H:box.H,
-            //     img:this.ctx.getImageData(0, 0, this.c.width, this.c.height)
-            // }
+            this.takeimage(box)
         }
     }
 
     partialrender(box) {
-        for (let i = box.align_L; i < box.align_W; i++) {
-            for (let j = box.align_T; j < box.align_H; j++) {
-                if (i<this.image.L ||
-                    j<this.image.T ||
-                    i>this.image.L+this.image.W-1 ||
-                    j>this.image.T+this.image.H-1) {
+        for (let i = box.align_L; i < box.align_L+box.align_W+1; i++) {
+            for (let j = box.align_T; j < box.align_T+box.align_H+1; j++) {
+                if (i<this.image.L+1 ||
+                    j<this.image.T+1 ||
+                    i>this.image.L+this.image.W-2 ||
+                    j>this.image.T+this.image.H-2) {
                     const x = this.size*(i-box.L), y = this.size*(j-box.T)
                     if (this.map[i] && this.map[i][j]) {
                         this.ctx.fillStyle = colors[this.map[i][j]]
@@ -49,8 +56,8 @@ class Biomes extends Map {
         this.ctx.rect(0, 0, this.c.width, this.c.height);
         this.ctx.fillStyle = 'grey';
         this.ctx.fill();
-        for (let i = box.align_L; i < box.align_W; i++) {
-            for (let j = box.align_T; j < box.align_H; j++) {
+        for (let i = box.align_L; i < box.align_L+box.align_W; i++) {
+            for (let j = box.align_T; j < box.align_T+box.align_H; j++) {
 
                 const x = this.size*(i-box.L), y = this.size*(j-box.T)
                 if (this.map[i] && this.map[i][j]) {
@@ -59,13 +66,7 @@ class Biomes extends Map {
                 }
             }
         }
-        this.image = {
-            L:box.L,
-            T:box.T,
-            W:box.W,
-            H:box.H,
-            img:this.ctx.getImageData(0, 0, this.c.width, this.c.height)
-        }
+        this.takeimage(box)
     }
 
     // render() {

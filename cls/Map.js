@@ -20,7 +20,10 @@ class Map {
         for (let j = 0; j < this.w; j++) {
             arr[j] = new Array(this.h)
             for (let i = 0; i < this.h; i++) {
-                arr[j][i] = JSON.parse(JSON.stringify(this.empty))
+                if (typeof this.empty == "object")
+                arr[j][i] = Object.create(this.empty)
+                else
+                arr[j][i] = (this.empty)
             }
         }
         return arr

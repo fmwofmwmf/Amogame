@@ -8,15 +8,17 @@ class Area extends Land {
 
         this.container.width = w*s
         this.container.height = h*s
-        this.transform(-10,-10,this.size)
+        ///dont remove :)
+        
 
         document.addEventListener('keydown', e => {
             const callback = {
                 "ArrowUp"    : ()=>{if (this.size!=30) {this.move(0,0,1)}},
                 "ArrowDown"  : ()=>{if (this.size>4) {this.move(0,0,-1)}},
+                " " : ()=>{this.move(0,0,0)},
             }[e.key]
             callback?.()
-            console.log(callback, this.size)
+            console.log(e.key==' ')
         });
     }
 
@@ -27,8 +29,10 @@ class Area extends Land {
         this.c.height = h
         this.biome_map.c.width = w
         this.biome_map.c.height = h
-        this.render()
-        this.biome_map.newrender(this.render_box)
+        this.transform(0, 0, this.size)
+        //this.render()
+        //this.biome_map.newrender(this.render_box)
+        
         //this.path_map.refresh()
     }
 
@@ -68,7 +72,6 @@ class Area extends Land {
         this.c.addEventListener('dragstart', e=>{
             if (!pathmode) {
                 ppos = [e.clientX, e.clientY]
-                e.dataTransfer.setDragImage(nothingimage(), 0, 0);
                 
             } else {
                 const cb = this.c.getBoundingClientRect()
@@ -80,7 +83,7 @@ class Area extends Land {
                     e.dataTransfer.setData("h", h);
                 }
             }
-            
+            e.dataTransfer.setDragImage(nothingimage(), 0, 0);
         })
 
         let moved = false
@@ -161,10 +164,10 @@ var pathmode = false
 bindToggle()
 
 const restrict = [450, 300]
-const siz = [[30, 20], [30, 20], [300, 300]]
+const siz = [[200, 200], [30, 20], [500, 500]]
 const areas = []
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 1; i++) {
     const s = 15
     areas.push(new Area(siz[i][0], siz[i][1], s, `land-canvas-w${i+1}`, `biome-canvas-w${i+1}`, `path-canvas-w${i+1}`, `w${i+1}`))
 }
