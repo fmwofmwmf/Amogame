@@ -50,3 +50,37 @@ const inv_navbar = new NavBar("inv-navbar", "inv-content")
 const display_navbar = new NavBar("display-navbar", "display-content")
 const area_navbar = new NavBar("canvas-navbar", "canvas-content")
 
+
+class Collapse {
+    constructor(collapseid, uncollapseid, containerid) {
+        this.collapse = document.getElementById(collapseid)
+        this.uncollapse = document.getElementById(uncollapseid)
+        this.container = document.getElementById(containerid)
+        this.container_display = this.container.style.display
+
+        this.uncollapse.style.display = "none"
+        this.collapse.addEventListener('click', e => {
+            this.do_collapse()
+        })
+        this.uncollapse.addEventListener('click', e => {
+            this.do_uncollapse()
+        })
+    }
+
+    do_collapse() {
+        this.container.style.display = "none"
+        this.uncollapse.style.display = "flex"
+    }
+
+    do_uncollapse() {
+        this.container.style.display = this.container_display
+        this.uncollapse.style.display = "none"
+    }
+
+}
+
+const resource_collapse = new Collapse("resource-collapse-button", "resource-uncollapse-button", "resource-container")
+const display_collapse = new Collapse("display-collapse-button", "display-uncollapse-button", "display-container")
+const log_collapse = new Collapse("log-collapse-button", "log-uncollapse-button", "log-container")
+const inv_collapse = new Collapse("inv-collapse-button", "inv-uncollapse-button", "inv-container")
+

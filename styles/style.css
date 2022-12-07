@@ -15,6 +15,9 @@ body{
     user-select: none;
     position: relative;
     background-color: #e5e5f7;
+    overflow: hidden;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
     /* background-image: 
     radial-gradient(ellipse farthest-corner at 0% 0% ,
      #013440, #013440 20%, transparent 20%),
@@ -44,6 +47,10 @@ body{
 
     background-repeat: repeat;  */
 }
+
+::-webkit-scrollbar {
+    display: none;
+  }
 
 #main_navbar {
     grid-column: 2/3;

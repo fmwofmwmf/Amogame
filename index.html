@@ -21,9 +21,15 @@
     <div id="main">
         <div id="world-page">
             <div id="resource-container" class="container">
+                <div id="resource-collapse" class="collapse">
+                    <div id="resource-collapse-button" class="collapse-button">-</div>
+                </div>
                 <div id="resource-content" class="content">
                     <div id="resource"></div>
                 </div>
+            </div>
+            <div id="resource-uncollapse" class="uncollapse">
+                <div id="resource-uncollapse-button" class="uncollapse-button">+</div>
             </div>
             <div id="canvas-container" class="container">
                 <div id="canvas-navbar" class="navbar">
@@ -62,6 +68,9 @@
                     <div id="display-nav-card-info" class="navbutton">Card</div>
                     <div id="display-nav-path-info" class="navbutton">Path</div>
                 </div>
+                <div id="display-collapse" class="collapse">
+                    <div id="display-collapse-button" class="collapse-button">-</div>
+                </div>
                 <div id="display-content" class="content">
                     <div id="display-tile-info" class="content-item">
                         <div id="tile-info">
@@ -85,8 +94,17 @@
                     </div>
                 </div>
             </div>
+            <div id="display-uncollapse" class="uncollapse">
+                <div id="display-uncollapse-button" class="uncollapse-button">+</div>
+            </div>
             <div id="log-container" class="container">
+                <div id="log-collapse" class="collapse">
+                    <div id="log-collapse-button" class="collapse-button">-</div>
+                </div>
                 <div id="log-content" class="content"></div>
+            </div>
+            <div id="log-uncollapse" class="uncollapse">
+                <div id="log-uncollapse-button" class="uncollapse-button">+</div>
             </div>
             <div id="inv-container" class="container">
                 <div id="inv-navbar" class="navbar">
@@ -94,11 +112,17 @@
                     <div id="inv-nav-card" class="navbutton">Cards</div>
                     <div id="inv-nav-box" class="navbutton">Boxes</div>
                 </div>
+                <div id="inv-collapse" class="collapse">
+                    <div id="inv-collapse-button" class="collapse-button">-</div>
+                </div>
                 <div id="inv-content" class="content">
                     <div id="inv-tile" class="content-item"></div>
                     <div id="inv-card" class="content-item"></div>
                     <div id="inv-box" class="content-item"></div>
                 </div>
+            </div>
+            <div id="inv-uncollapse" class="uncollapse">
+                <div id="inv-uncollapse-button" class="uncollapse-button">+</div>
             </div>
         </div>
         <div id="shop-page"></div>
