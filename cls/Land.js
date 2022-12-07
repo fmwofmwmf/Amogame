@@ -1,3 +1,4 @@
+
 class Land extends Map {
     xoff=0;
     yoff=0;
@@ -69,12 +70,25 @@ class Land extends Map {
         return out
     }
 
+    explorationPercent() {
+        let count = 0
+        for (let i = 0; i < this.w; i++) {
+            for (let j = 0; j < this.h; j++) {
+                if (this.map[i][j].c!=0) {
+                    count++;
+                }
+            }
+        }
+        console.log(count+' explored')
+    }
+
     refresh(box, plot=true) {
         if (box===undefined) {
             box=this.render_box
         }
         // if (this.image===undefined) {
             this.render(box, plot)
+            this.explorationPercent()
         // } else {
         //     this.partialrender(box)
         //     this.ctx.putImageData(this.image.img, (this.image.L-box.L)*this.size, (this.image.T-box.T)*this.size)
@@ -325,6 +339,4 @@ function add_struct_info(element, pos, area, draw=false) {
             break;
     }
 }
-
-
 

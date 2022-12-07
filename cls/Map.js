@@ -1,12 +1,12 @@
 class Map {
-    constructor(w, h, s, e, canvas) {
+    constructor(w, h, s, e, canvas, mode='2d') {
         this.w = w
         this.h = h;
         this.size = s;
         this.empty = e
 
         this.c = document.getElementById(canvas);
-        this.ctx = this.c.getContext("2d", {willReadFrequently: true});
+        this.ctx = this.c.getContext(mode, {willReadFrequently: true});
         this.map = this.gen_empty();
 
         this.c.width = this.w*this.size;

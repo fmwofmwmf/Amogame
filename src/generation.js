@@ -254,5 +254,3 @@ function newbiome(x, y, w, h) {
     }
     return out
 }
-console.log(biome(50,20,[1, 2, 3, 4], [30,30,30,30]), 'old')
-console.log(newbiome(0,0,50,20), 'new')

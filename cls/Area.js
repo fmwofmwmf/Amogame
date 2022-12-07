@@ -29,6 +29,7 @@ class Area extends Land {
         this.c.height = h
         this.biome_map.c.width = w
         this.biome_map.c.height = h
+        this.biome_map.ctx.viewport(0, 0, w, h);
         this.transform(0, 0, this.size)
         //this.render()
         //this.biome_map.newrender(this.render_box)
